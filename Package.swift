@@ -6,13 +6,18 @@ import PackageDescription
 let package = Package(
     name: "pocketpilot-api",
     platforms: [
-        .macOS(.v13)
+        .macOS(.v13),
+        .iOS(.v16)
     ],
     dependencies: [
-        .package(url: "https://github.com/vapor/vapor.git", from: "4.99.3"),
-        .package(url: "https://github.com/vapor/fluent.git", from: "4.9.0"),
-        .package(url: "https://github.com/vapor/fluent-postgres-driver.git", from: "2.8.0"),
-        .package(url: "https://github.com/vapor/jwt.git", from: "4.2.2"),
+        // Vapor framework - using older version for better Windows compatibility
+        .package(url: "https://github.com/vapor/vapor.git", from: "4.77.0"),
+        // Fluent ORM
+        .package(url: "https://github.com/vapor/fluent.git", from: "4.8.0"),
+        // SQLite driver for Windows development
+        .package(url: "https://github.com/vapor/fluent-sqlite-driver.git", from: "4.0.0"),
+        // JWT - using older version
+        .package(url: "https://github.com/vapor/jwt.git", from: "4.0.0"),
     ],
     targets: [
         .executableTarget(
@@ -20,7 +25,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "Fluent", package: "fluent"),
-                .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver"),
+                .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver"),
                 .product(name: "JWT", package: "jwt"),
             ]
         ),

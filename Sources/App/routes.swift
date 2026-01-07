@@ -9,10 +9,8 @@ func routes(_ app: Application) throws {
     // API v1 routes
     let api = app.grouped("api", "v1")
     
-    // Auth routes (public)
-    let authController = AuthController()
-    api.post("auth", "register", use: authController.register)
-    api.post("auth", "login", use: authController.login)
+    // Auth routes
+    try api.register(collection: AuthController())
     
     // Protected routes
     let protected = api.grouped(JWTAuthenticator())

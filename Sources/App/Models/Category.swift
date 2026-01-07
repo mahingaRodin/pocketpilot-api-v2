@@ -47,7 +47,7 @@ enum ExpenseCategory: String, CaseIterable, Codable {
         case .groceries: return "🛒"
         case .utilities: return "💡"
         case .rent: return "🏠"
-        case .insurance: return "🛡️"
+        case .insurance: return "🛡️"    
         case .other: return "📦"
         }
     }
