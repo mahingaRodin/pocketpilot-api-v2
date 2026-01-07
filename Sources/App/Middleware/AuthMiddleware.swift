@@ -27,7 +27,7 @@ struct JWTAuthenticator: AsyncJWTAuthenticator {
         }
         
         request.auth.login(user)
-        request.auth.login(jwt) // Also store the JWT payload for session info
+//        request.auth.login(jwt) // Also store the JWT payload for session info
     }
     
     private func requiresEmailVerification(_ path: String) -> Bool {

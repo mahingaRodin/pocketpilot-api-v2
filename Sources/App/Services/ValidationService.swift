@@ -47,26 +47,49 @@ struct ValidationService {
     }
 }
 
-// MARK: - Custom Validators
+// MARK: - Custom Validators using Vapor's built-in ValidatorResults
 extension Validator where T == String {
     static var strongPassword: Validator<T> {
-        .init {
-            let validation = ValidationService.validatePassword($0)
+        .init { value in
+            let validation = ValidationService.validatePassword(value)
             guard validation.isValid else {
-                return ValidatorResult.failure(validation.errors.joined(separator: ", "))
+                return BasicValidatorResult(
+                    isFailure: true,
+                    successDescription: nil,
+                    failureDescription: validation.errors.joined(separator: ", ")
+                )
             }
-            return ValidatorResult.success
+            return BasicValidatorResult(
+                isFailure: false,
+                successDescription: "Password is strong",
+                failureDescription: nil
+            )
         }
     }
 }
 
 extension Validator where T == Double {
     static var validAmount: Validator<T> {
-        .init {
-            guard ValidationService.validateAmount($0) else {
-                return ValidatorResult.failure("Amount must be between 0.01 and 999,999.99")
+        .init { value in
+            guard ValidationService.validateAmount(value) else {
+                return BasicValidatorResult(
+                    isFailure: true,
+                    successDescription: nil,
+                    failureDescription: "Amount must be between 0.01 and 999,999.99"
+                )
             }
-            return ValidatorResult.success
+            return BasicValidatorResult(
+                isFailure: false,
+                successDescription: "Valid amount",
+                failureDescription: nil
+            )
         }
     }
+}
+
+// MARK: - BasicValidatorResult conforming to ValidatorResult
+struct BasicValidatorResult: ValidatorResult {
+    let isFailure: Bool
+    let successDescription: String?
+    let failureDescription: String?
 }

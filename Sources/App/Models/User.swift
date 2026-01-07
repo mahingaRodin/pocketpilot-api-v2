@@ -148,7 +148,7 @@ extension User {
 }
 
 // MARK: - JWT Payload
-struct UserPayload: JWTPayload {
+struct UserPayload: JWTPayload , Authenticatable{
     var userID: UUID
     var email: String
     var tokenType: TokenType
