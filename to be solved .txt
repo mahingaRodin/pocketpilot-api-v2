@@ -1,0 +1,881 @@
+Working copy of https://github.com/vapor/vapor.git resolved at 4.121.0
+Working copy of https://github.com/vapor/websocket-kit.git resolved at 2.16.1
+Working copy of https://github.com/apple/swift-async-algorithms.git resolved at 1.1.1
+warning: 'jwt': found 1 file(s) which are unhandled; explicitly declare them as resources or exclude from the target
+  /Users/headie-one/Desktop/pocketpilot-api-v2/.build/checkouts/jwt/Sources/JWT/Docs.docc
+Building for debugging...
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/EmailService.swift:67:20: error: type 'any Application.EmailServiceKey.Value' (aka 'any EmailServiceProtocol') does not conform to the 'Sendable' protocol
+ 1 | import Vapor
+ 2 | 
+ 3 | protocol EmailServiceProtocol {
+  |     `- note: protocol 'EmailServiceProtocol' does not conform to the 'Sendable' protocol
+ 4 |   func sendVerificationEmail(to email: String, token: String, baseURL: String) async throws
+ 5 |   func sendPasswordResetEmail(to email: String, token: String, baseURL: String) async throws
+  :
+65 | // MARK: - Application Extension
+66 | extension Application {
+67 |   private struct EmailServiceKey: StorageKey {
+  |          `- error: type 'any Application.EmailServiceKey.Value' (aka 'any EmailServiceProtocol') does not conform to the 'Sendable' protocol
+68 |     typealias Value = EmailServiceProtocol
+69 |   }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/JWTService.swift:12:42: error: value of type 'Application.JWT' has no member 'sign'
+10 |   
+11 |   func sign<Payload: JWTPayload>(_ payload: Payload) async throws -> String {
+12 |     return try await application.jwt.sign(payload)
+  |                     `- error: value of type 'Application.JWT' has no member 'sign'
+13 |   }
+14 |   
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/JWTService.swift:16:42: error: value of type 'Application.JWT' has no member 'verify'
+14 |   
+15 |   func verify<Payload: JWTPayload>(_ token: String, as payload: Payload.Type) async throws -> Payload {
+16 |     return try await application.jwt.verify(token, as: payload)
+  |                     `- error: value of type 'Application.JWT' has no member 'verify'
+17 |   }
+18 |   
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/JWTService.swift:26:36: error: value of type 'Application.JWT' has no member 'sign'
+24 |     )
+25 |     
+26 |     return try application.jwt.sign(payload)
+  |                  `- error: value of type 'Application.JWT' has no member 'sign'
+27 |   }
+28 | }
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/EmailService.swift:67:20: error: type 'any Application.EmailServiceKey.Value' (aka 'any EmailServiceProtocol') does not conform to the 'Sendable' protocol
+ 1 | import Vapor
+ 2 | 
+ 3 | protocol EmailServiceProtocol {
+  |     `- note: protocol 'EmailServiceProtocol' does not conform to the 'Sendable' protocol
+ 4 |   func sendVerificationEmail(to email: String, token: String, baseURL: String) async throws
+ 5 |   func sendPasswordResetEmail(to email: String, token: String, baseURL: String) async throws
+  :
+65 | // MARK: - Application Extension
+66 | extension Application {
+67 |   private struct EmailServiceKey: StorageKey {
+  |          `- error: type 'any Application.EmailServiceKey.Value' (aka 'any EmailServiceProtocol') does not conform to the 'Sendable' protocol
+68 |     typealias Value = EmailServiceProtocol
+69 |   }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/JWTService.swift:12:42: error: value of type 'Application.JWT' has no member 'sign'
+10 |   
+11 |   func sign<Payload: JWTPayload>(_ payload: Payload) async throws -> String {
+12 |     return try await application.jwt.sign(payload)
+  |                     `- error: value of type 'Application.JWT' has no member 'sign'
+13 |   }
+14 |   
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/JWTService.swift:16:42: error: value of type 'Application.JWT' has no member 'verify'
+14 |   
+15 |   func verify<Payload: JWTPayload>(_ token: String, as payload: Payload.Type) async throws -> Payload {
+16 |     return try await application.jwt.verify(token, as: payload)
+  |                     `- error: value of type 'Application.JWT' has no member 'verify'
+17 |   }
+18 |   
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/JWTService.swift:26:36: error: value of type 'Application.JWT' has no member 'sign'
+24 |     )
+25 |     
+26 |     return try application.jwt.sign(payload)
+  |                  `- error: value of type 'Application.JWT' has no member 'sign'
+27 |   }
+28 | }
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/ValidationService.swift:56:41: error: type 'ValidatorResults' has no member 'Failure'
+54 |       let validation = ValidationService.validatePassword($0)
+55 |       guard validation.isValid else {
+56 |         return ValidatorResults.Failure(validation.errors.joined(separator: ", "))
+  |                     `- error: type 'ValidatorResults' has no member 'Failure'
+57 |       }
+58 |       return ValidatorResults.Success
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/ValidationService.swift:67:41: error: type 'ValidatorResults' has no member 'Failure'
+65 |     .init {
+66 |       guard ValidationService.validateAmount($0) else {
+67 |         return ValidatorResults.Failure("Amount must be between 0.01 and 999,999.99")
+  |                     `- error: type 'ValidatorResults' has no member 'Failure'
+68 |       }
+69 |       return ValidatorResults.Success
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/configure.swift:14:23: error: value of type 'Application.JWT' has no member 'keys'
+12 |   // Configure JWT
+13 |   if let jwtSecret = Environment.get("JWT_SECRET") {
+14 |     await app.jwt.keys.addHMAC(key: jwtSecret, digestAlgorithm: .sha256)
+  |            `- error: value of type 'Application.JWT' has no member 'keys'
+15 |   } else {
+16 |     // Development fallback - use a default secret
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/configure.swift:14:70: error: cannot infer contextual base in reference to member 'sha256'
+12 |   // Configure JWT
+13 |   if let jwtSecret = Environment.get("JWT_SECRET") {
+14 |     await app.jwt.keys.addHMAC(key: jwtSecret, digestAlgorithm: .sha256)
+  |                                   `- error: cannot infer contextual base in reference to member 'sha256'
+15 |   } else {
+16 |     // Development fallback - use a default secret
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/configure.swift:17:23: error: value of type 'Application.JWT' has no member 'keys'
+15 |   } else {
+16 |     // Development fallback - use a default secret
+17 |     await app.jwt.keys.addHMAC(key: "development-secret-key-not-for-production", digestAlgorithm: .sha256)
+  |            `- error: value of type 'Application.JWT' has no member 'keys'
+18 |     app.logger.warning("Using default JWT secret - not suitable for production!")
+19 |   }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/configure.swift:17:104: error: cannot infer contextual base in reference to member 'sha256'
+15 |   } else {
+16 |     // Development fallback - use a default secret
+17 |     await app.jwt.keys.addHMAC(key: "development-secret-key-not-for-production", digestAlgorithm: .sha256)
+  |                                                    `- error: cannot infer contextual base in reference to member 'sha256'
+18 |     app.logger.warning("Using default JWT secret - not suitable for production!")
+19 |   }
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/ValidationService.swift:56:41: error: type 'ValidatorResults' has no member 'Failure'
+54 |       let validation = ValidationService.validatePassword($0)
+55 |       guard validation.isValid else {
+56 |         return ValidatorResults.Failure(validation.errors.joined(separator: ", "))
+  |                     `- error: type 'ValidatorResults' has no member 'Failure'
+57 |       }
+58 |       return ValidatorResults.Success
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/ValidationService.swift:67:41: error: type 'ValidatorResults' has no member 'Failure'
+65 |     .init {
+66 |       guard ValidationService.validateAmount($0) else {
+67 |         return ValidatorResults.Failure("Amount must be between 0.01 and 999,999.99")
+  |                     `- error: type 'ValidatorResults' has no member 'Failure'
+68 |       }
+69 |       return ValidatorResults.Success
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/configure.swift:14:23: error: value of type 'Application.JWT' has no member 'keys'
+12 |   // Configure JWT
+13 |   if let jwtSecret = Environment.get("JWT_SECRET") {
+14 |     await app.jwt.keys.addHMAC(key: jwtSecret, digestAlgorithm: .sha256)
+  |            `- error: value of type 'Application.JWT' has no member 'keys'
+15 |   } else {
+16 |     // Development fallback - use a default secret
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/configure.swift:14:70: error: cannot infer contextual base in reference to member 'sha256'
+12 |   // Configure JWT
+13 |   if let jwtSecret = Environment.get("JWT_SECRET") {
+14 |     await app.jwt.keys.addHMAC(key: jwtSecret, digestAlgorithm: .sha256)
+  |                                   `- error: cannot infer contextual base in reference to member 'sha256'
+15 |   } else {
+16 |     // Development fallback - use a default secret
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/configure.swift:17:23: error: value of type 'Application.JWT' has no member 'keys'
+15 |   } else {
+16 |     // Development fallback - use a default secret
+17 |     await app.jwt.keys.addHMAC(key: "development-secret-key-not-for-production", digestAlgorithm: .sha256)
+  |            `- error: value of type 'Application.JWT' has no member 'keys'
+18 |     app.logger.warning("Using default JWT secret - not suitable for production!")
+19 |   }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/configure.swift:17:104: error: cannot infer contextual base in reference to member 'sha256'
+15 |   } else {
+16 |     // Development fallback - use a default secret
+17 |     await app.jwt.keys.addHMAC(key: "development-secret-key-not-for-production", digestAlgorithm: .sha256)
+  |                                                    `- error: cannot infer contextual base in reference to member 'sha256'
+18 |     app.logger.warning("Using default JWT secret - not suitable for production!")
+19 |   }
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Migrations/CreateUser.swift:23:24: error: cannot find type 'SQLDatabase' in scope
+21 |     
+22 |     // Set default values based on database type
+23 |     if database is SQLDatabase {
+  |            `- error: cannot find type 'SQLDatabase' in scope
+24 |       // For SQLite, we'll handle defaults in the model
+25 |       try await builder.create()
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Migrations/CreateUser.swift:23:24: error: cannot find type 'SQLDatabase' in scope
+21 |     
+22 |     // Set default values based on database type
+23 |     if database is SQLDatabase {
+  |            `- error: cannot find type 'SQLDatabase' in scope
+24 |       // For SQLite, we'll handle defaults in the model
+25 |       try await builder.create()
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Migrations/CreateUser.swift:23:24: error: cannot find type 'SQLDatabase' in scope
+21 |     
+22 |     // Set default values based on database type
+23 |     if database is SQLDatabase {
+  |            `- error: cannot find type 'SQLDatabase' in scope
+24 |       // For SQLite, we'll handle defaults in the model
+25 |       try await builder.create()
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Models/RefreshToken.swift:34:32: error: missing argument for parameter 'on' in call
+32 |   var createdAt: Date?
+33 |   
+34 |   @Timestamp(key: "last_used")
+  |                `- error: missing argument for parameter 'on' in call
+35 |   var lastUsed: Date?
+36 |   
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/.build/checkouts/fluent-kit/Sources/FluentKit/Properties/Timestamp.swift:65:24: note: 'init(key:on:)' declared here
+ 63 | 
+ 64 | extension TimestampProperty where Format == DefaultTimestampFormat {
+ 65 |   public convenience init(key: FieldKey, on trigger: TimestampTrigger) {
+  |            `- note: 'init(key:on:)' declared here
+ 66 |     self.init(key: key, on: trigger, format: .default)
+ 67 |   }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Models/User.swift:77:1: error: type 'User' does not conform to protocol 'ModelAuthenticatable'
+ 75 | 
+ 76 | // MARK: - Authentication
+ 77 | extension User: ModelAuthenticatable {
+  | |- error: type 'User' does not conform to protocol 'ModelAuthenticatable'
+  | `- note: add stubs for conformance
+ 78 |   static let usernameKey = \User.$email
+  |        `- note: candidate has non-matching type 'any KeyPath<User, FieldProperty<User, String>> & Sendable'
+ 79 |   static let passwordHashKey = \User.$passwordHash
+  |        `- note: candidate has non-matching type 'any KeyPath<User, FieldProperty<User, String>> & Sendable'
+ 80 |   
+ 81 |   func verify(password: String) async throws -> Bool {
+  |     `- note: candidate is 'async', but protocol requirement is not
+ 82 |     try Bcrypt.verify(password, created: self.passwordHash)
+ 83 |   }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/.build/checkouts/fluent/Sources/Fluent/ModelAuthenticatable.swift:5:16: note: protocol requires property 'usernameKey' with type 'KeyPath<Self, FieldProperty<Self, String>>'
+ 3 | 
+ 4 | public protocol ModelAuthenticatable: Model, Authenticatable {
+ 5 |   static var usernameKey: KeyPath<Self, FieldProperty<Self, String>> { get }
+  |        `- note: protocol requires property 'usernameKey' with type 'KeyPath<Self, FieldProperty<Self, String>>'
+ 6 |   static var passwordHashKey: KeyPath<Self, FieldProperty<Self, String>> { get }
+  |        `- note: protocol requires property 'passwordHashKey' with type 'KeyPath<Self, FieldProperty<Self, String>>'
+ 7 |   func verify(password: String) throws -> Bool
+  |     `- note: protocol requires function 'verify(password:)' with type '(String) throws -> Bool'
+ 8 | }
+ 9 | 
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:80:15: error: expression is 'async' but is not marked with 'await'
+ 78 |     
+ 79 |     // Verify password
+ 80 |     guard try user.verify(password: request.password) else {
+  |        |  `- note: call is 'async'
+  |        `- error: expression is 'async' but is not marked with 'await'
+ 81 |       user.recordFailedLogin()
+ 82 |       try await user.save(on: req.db)
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:153:18: error: no exact matches in call to instance method 'sort'
+151 |         .filter(\.$user.$id == user.id!)
+152 |         .filter(\.$revoked == false)
+153 |         .sort(\.$lastUsed, .descending)
+  |         `- error: no exact matches in call to instance method 'sort'
+154 |         .first()?
+155 |         .revoke()
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/.build/checkouts/fluent-kit/Sources/FluentKit/Query/Builder/QueryBuilder+Sort.swift:27:17: note: candidate expects value of type 'FieldKey' for parameter #1 (got 'KeyPath<Root, Value>')
+25 | 
+26 |   @discardableResult
+27 |   public func sort(
+  |         `- note: candidate expects value of type 'FieldKey' for parameter #1 (got 'KeyPath<Root, Value>')
+28 |     _ path: FieldKey,
+29 |     _ direction: DatabaseQuery.Sort.Direction = .ascending
+  :
+33 | 
+34 |   @discardableResult
+35 |   public func sort(
+  |         `- note: candidate expects value of type '[FieldKey]' for parameter #1 (got 'KeyPath<Root, Value>')
+36 |     _ path: [FieldKey],
+37 |     _ direction: DatabaseQuery.Sort.Direction = .ascending
+  :
+80 | 
+81 |   @discardableResult
+82 |   public func sort(
+  |         `- note: candidate expects value of type 'DatabaseQuery.Field' for parameter #1 (got 'KeyPath<Root, Value>')
+83 |     _ field: DatabaseQuery.Field,
+84 |     _ direction: DatabaseQuery.Sort.Direction
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:153:23: error: cannot infer key path type from context; consider explicitly specifying a root type
+151 |         .filter(\.$user.$id == user.id!)
+152 |         .filter(\.$revoked == false)
+153 |         .sort(\.$lastUsed, .descending)
+  |            `- error: cannot infer key path type from context; consider explicitly specifying a root type
+154 |         .first()?
+155 |         .revoke()
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:225:15: error: expression is 'async' but is not marked with 'await'
+223 |   ) async throws -> HTTPStatus {
+224 |     // Verify current password
+225 |     guard try user.verify(password: currentPassword) else {
+  |        |  `- note: call is 'async'
+  |        `- error: expression is 'async' but is not marked with 'await'
+226 |       throw Abort(.unauthorized, reason: "Current password is incorrect")
+227 |     }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:348:19: error: extra argument 'iat' in call
+346 |       tokenType: .access,
+347 |       sessionID: sessionID,
+348 |       iat: .init(value: Date()),
+  |          `- error: extra argument 'iat' in call
+349 |       exp: .init(value: Date().addingTimeInterval(900)) // 15 minutes
+350 |     )
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:348:19: error: cannot infer contextual base in reference to member 'init'
+346 |       tokenType: .access,
+347 |       sessionID: sessionID,
+348 |       iat: .init(value: Date()),
+  |          `- error: cannot infer contextual base in reference to member 'init'
+349 |       exp: .init(value: Date().addingTimeInterval(900)) // 15 minutes
+350 |     )
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:352:34: error: value of type 'Application.JWT' has no member 'sign'
+350 |     )
+351 |     
+352 |     return try await app.jwt.sign(payload)
+  |                 `- error: value of type 'Application.JWT' has no member 'sign'
+353 |   }
+354 |   
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Models/RefreshToken.swift:34:32: error: missing argument for parameter 'on' in call
+32 |   var createdAt: Date?
+33 |   
+34 |   @Timestamp(key: "last_used")
+  |                `- error: missing argument for parameter 'on' in call
+35 |   var lastUsed: Date?
+36 |   
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/.build/checkouts/fluent-kit/Sources/FluentKit/Properties/Timestamp.swift:65:24: note: 'init(key:on:)' declared here
+ 63 | 
+ 64 | extension TimestampProperty where Format == DefaultTimestampFormat {
+ 65 |   public convenience init(key: FieldKey, on trigger: TimestampTrigger) {
+  |            `- note: 'init(key:on:)' declared here
+ 66 |     self.init(key: key, on: trigger, format: .default)
+ 67 |   }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Models/User.swift:77:1: error: type 'User' does not conform to protocol 'ModelAuthenticatable'
+ 75 | 
+ 76 | // MARK: - Authentication
+ 77 | extension User: ModelAuthenticatable {
+  | |- error: type 'User' does not conform to protocol 'ModelAuthenticatable'
+  | `- note: add stubs for conformance
+ 78 |   static let usernameKey = \User.$email
+  |        `- note: candidate has non-matching type 'any KeyPath<User, FieldProperty<User, String>> & Sendable'
+ 79 |   static let passwordHashKey = \User.$passwordHash
+  |        `- note: candidate has non-matching type 'any KeyPath<User, FieldProperty<User, String>> & Sendable'
+ 80 |   
+ 81 |   func verify(password: String) async throws -> Bool {
+  |     `- note: candidate is 'async', but protocol requirement is not
+ 82 |     try Bcrypt.verify(password, created: self.passwordHash)
+ 83 |   }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/.build/checkouts/fluent/Sources/Fluent/ModelAuthenticatable.swift:5:16: note: protocol requires property 'usernameKey' with type 'KeyPath<Self, FieldProperty<Self, String>>'
+ 3 | 
+ 4 | public protocol ModelAuthenticatable: Model, Authenticatable {
+ 5 |   static var usernameKey: KeyPath<Self, FieldProperty<Self, String>> { get }
+  |        `- note: protocol requires property 'usernameKey' with type 'KeyPath<Self, FieldProperty<Self, String>>'
+ 6 |   static var passwordHashKey: KeyPath<Self, FieldProperty<Self, String>> { get }
+  |        `- note: protocol requires property 'passwordHashKey' with type 'KeyPath<Self, FieldProperty<Self, String>>'
+ 7 |   func verify(password: String) throws -> Bool
+  |     `- note: protocol requires function 'verify(password:)' with type '(String) throws -> Bool'
+ 8 | }
+ 9 | 
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:80:15: error: expression is 'async' but is not marked with 'await'
+ 78 |     
+ 79 |     // Verify password
+ 80 |     guard try user.verify(password: request.password) else {
+  |        |  `- note: call is 'async'
+  |        `- error: expression is 'async' but is not marked with 'await'
+ 81 |       user.recordFailedLogin()
+ 82 |       try await user.save(on: req.db)
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:153:18: error: no exact matches in call to instance method 'sort'
+151 |         .filter(\.$user.$id == user.id!)
+152 |         .filter(\.$revoked == false)
+153 |         .sort(\.$lastUsed, .descending)
+  |         `- error: no exact matches in call to instance method 'sort'
+154 |         .first()?
+155 |         .revoke()
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/.build/checkouts/fluent-kit/Sources/FluentKit/Query/Builder/QueryBuilder+Sort.swift:27:17: note: candidate expects value of type 'FieldKey' for parameter #1 (got 'KeyPath<Root, Value>')
+25 | 
+26 |   @discardableResult
+27 |   public func sort(
+  |         `- note: candidate expects value of type 'FieldKey' for parameter #1 (got 'KeyPath<Root, Value>')
+28 |     _ path: FieldKey,
+29 |     _ direction: DatabaseQuery.Sort.Direction = .ascending
+  :
+33 | 
+34 |   @discardableResult
+35 |   public func sort(
+  |         `- note: candidate expects value of type '[FieldKey]' for parameter #1 (got 'KeyPath<Root, Value>')
+36 |     _ path: [FieldKey],
+37 |     _ direction: DatabaseQuery.Sort.Direction = .ascending
+  :
+80 | 
+81 |   @discardableResult
+82 |   public func sort(
+  |         `- note: candidate expects value of type 'DatabaseQuery.Field' for parameter #1 (got 'KeyPath<Root, Value>')
+83 |     _ field: DatabaseQuery.Field,
+84 |     _ direction: DatabaseQuery.Sort.Direction
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:153:23: error: cannot infer key path type from context; consider explicitly specifying a root type
+151 |         .filter(\.$user.$id == user.id!)
+152 |         .filter(\.$revoked == false)
+153 |         .sort(\.$lastUsed, .descending)
+  |            `- error: cannot infer key path type from context; consider explicitly specifying a root type
+154 |         .first()?
+155 |         .revoke()
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:225:15: error: expression is 'async' but is not marked with 'await'
+223 |   ) async throws -> HTTPStatus {
+224 |     // Verify current password
+225 |     guard try user.verify(password: currentPassword) else {
+  |        |  `- note: call is 'async'
+  |        `- error: expression is 'async' but is not marked with 'await'
+226 |       throw Abort(.unauthorized, reason: "Current password is incorrect")
+227 |     }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:348:19: error: extra argument 'iat' in call
+346 |       tokenType: .access,
+347 |       sessionID: sessionID,
+348 |       iat: .init(value: Date()),
+  |          `- error: extra argument 'iat' in call
+349 |       exp: .init(value: Date().addingTimeInterval(900)) // 15 minutes
+350 |     )
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:348:19: error: cannot infer contextual base in reference to member 'init'
+346 |       tokenType: .access,
+347 |       sessionID: sessionID,
+348 |       iat: .init(value: Date()),
+  |          `- error: cannot infer contextual base in reference to member 'init'
+349 |       exp: .init(value: Date().addingTimeInterval(900)) // 15 minutes
+350 |     )
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:352:34: error: value of type 'Application.JWT' has no member 'sign'
+350 |     )
+351 |     
+352 |     return try await app.jwt.sign(payload)
+  |                 `- error: value of type 'Application.JWT' has no member 'sign'
+353 |   }
+354 |   
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Models/RefreshToken.swift:34:32: error: missing argument for parameter 'on' in call
+32 |   var createdAt: Date?
+33 |   
+34 |   @Timestamp(key: "last_used")
+  |                `- error: missing argument for parameter 'on' in call
+35 |   var lastUsed: Date?
+36 |   
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/.build/checkouts/fluent-kit/Sources/FluentKit/Properties/Timestamp.swift:65:24: note: 'init(key:on:)' declared here
+ 63 | 
+ 64 | extension TimestampProperty where Format == DefaultTimestampFormat {
+ 65 |   public convenience init(key: FieldKey, on trigger: TimestampTrigger) {
+  |            `- note: 'init(key:on:)' declared here
+ 66 |     self.init(key: key, on: trigger, format: .default)
+ 67 |   }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Models/User.swift:77:1: error: type 'User' does not conform to protocol 'ModelAuthenticatable'
+ 75 | 
+ 76 | // MARK: - Authentication
+ 77 | extension User: ModelAuthenticatable {
+  | |- error: type 'User' does not conform to protocol 'ModelAuthenticatable'
+  | `- note: add stubs for conformance
+ 78 |   static let usernameKey = \User.$email
+  |        `- note: candidate has non-matching type 'any KeyPath<User, FieldProperty<User, String>> & Sendable'
+ 79 |   static let passwordHashKey = \User.$passwordHash
+  |        `- note: candidate has non-matching type 'any KeyPath<User, FieldProperty<User, String>> & Sendable'
+ 80 |   
+ 81 |   func verify(password: String) async throws -> Bool {
+  |     `- note: candidate is 'async', but protocol requirement is not
+ 82 |     try Bcrypt.verify(password, created: self.passwordHash)
+ 83 |   }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/.build/checkouts/fluent/Sources/Fluent/ModelAuthenticatable.swift:5:16: note: protocol requires property 'usernameKey' with type 'KeyPath<Self, FieldProperty<Self, String>>'
+ 3 | 
+ 4 | public protocol ModelAuthenticatable: Model, Authenticatable {
+ 5 |   static var usernameKey: KeyPath<Self, FieldProperty<Self, String>> { get }
+  |        `- note: protocol requires property 'usernameKey' with type 'KeyPath<Self, FieldProperty<Self, String>>'
+ 6 |   static var passwordHashKey: KeyPath<Self, FieldProperty<Self, String>> { get }
+  |        `- note: protocol requires property 'passwordHashKey' with type 'KeyPath<Self, FieldProperty<Self, String>>'
+ 7 |   func verify(password: String) throws -> Bool
+  |     `- note: protocol requires function 'verify(password:)' with type '(String) throws -> Bool'
+ 8 | }
+ 9 | 
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:80:15: error: expression is 'async' but is not marked with 'await'
+ 78 |     
+ 79 |     // Verify password
+ 80 |     guard try user.verify(password: request.password) else {
+  |        |  `- note: call is 'async'
+  |        `- error: expression is 'async' but is not marked with 'await'
+ 81 |       user.recordFailedLogin()
+ 82 |       try await user.save(on: req.db)
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:153:18: error: no exact matches in call to instance method 'sort'
+151 |         .filter(\.$user.$id == user.id!)
+152 |         .filter(\.$revoked == false)
+153 |         .sort(\.$lastUsed, .descending)
+  |         `- error: no exact matches in call to instance method 'sort'
+154 |         .first()?
+155 |         .revoke()
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/.build/checkouts/fluent-kit/Sources/FluentKit/Query/Builder/QueryBuilder+Sort.swift:27:17: note: candidate expects value of type 'FieldKey' for parameter #1 (got 'KeyPath<Root, Value>')
+25 | 
+26 |   @discardableResult
+27 |   public func sort(
+  |         `- note: candidate expects value of type 'FieldKey' for parameter #1 (got 'KeyPath<Root, Value>')
+28 |     _ path: FieldKey,
+29 |     _ direction: DatabaseQuery.Sort.Direction = .ascending
+  :
+33 | 
+34 |   @discardableResult
+35 |   public func sort(
+  |         `- note: candidate expects value of type '[FieldKey]' for parameter #1 (got 'KeyPath<Root, Value>')
+36 |     _ path: [FieldKey],
+37 |     _ direction: DatabaseQuery.Sort.Direction = .ascending
+  :
+80 | 
+81 |   @discardableResult
+82 |   public func sort(
+  |         `- note: candidate expects value of type 'DatabaseQuery.Field' for parameter #1 (got 'KeyPath<Root, Value>')
+83 |     _ field: DatabaseQuery.Field,
+84 |     _ direction: DatabaseQuery.Sort.Direction
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:153:23: error: cannot infer key path type from context; consider explicitly specifying a root type
+151 |         .filter(\.$user.$id == user.id!)
+152 |         .filter(\.$revoked == false)
+153 |         .sort(\.$lastUsed, .descending)
+  |            `- error: cannot infer key path type from context; consider explicitly specifying a root type
+154 |         .first()?
+155 |         .revoke()
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:225:15: error: expression is 'async' but is not marked with 'await'
+223 |   ) async throws -> HTTPStatus {
+224 |     // Verify current password
+225 |     guard try user.verify(password: currentPassword) else {
+  |        |  `- note: call is 'async'
+  |        `- error: expression is 'async' but is not marked with 'await'
+226 |       throw Abort(.unauthorized, reason: "Current password is incorrect")
+227 |     }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:348:19: error: extra argument 'iat' in call
+346 |       tokenType: .access,
+347 |       sessionID: sessionID,
+348 |       iat: .init(value: Date()),
+  |          `- error: extra argument 'iat' in call
+349 |       exp: .init(value: Date().addingTimeInterval(900)) // 15 minutes
+350 |     )
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:348:19: error: cannot infer contextual base in reference to member 'init'
+346 |       tokenType: .access,
+347 |       sessionID: sessionID,
+348 |       iat: .init(value: Date()),
+  |          `- error: cannot infer contextual base in reference to member 'init'
+349 |       exp: .init(value: Date().addingTimeInterval(900)) // 15 minutes
+350 |     )
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/AuthenticationService.swift:352:34: error: value of type 'Application.JWT' has no member 'sign'
+350 |     )
+351 |     
+352 |     return try await app.jwt.sign(payload)
+  |                 `- error: value of type 'Application.JWT' has no member 'sign'
+353 |   }
+354 |   
+error: emit-module command failed with exit code 1 (use -v to see invocation)
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Middleware/AuthMiddleware.swift:75:17: warning: stored property 'storage' of 'Sendable'-conforming struct 'RateLimitMiddleware' has non-Sendable type 'MemoryStorage'
+ 73 |   private let maxAttempts: Int
+ 74 |   private let timeWindow: TimeInterval
+ 75 |   private let storage: MemoryStorage
+  |         `- warning: stored property 'storage' of 'Sendable'-conforming struct 'RateLimitMiddleware' has non-Sendable type 'MemoryStorage'
+ 76 |   
+ 77 |   init(maxAttempts: Int = 5, timeWindow: TimeInterval = 900) { // 5 attempts per 15 minutes
+  :
+115 | 
+116 | // MARK: - Simple Memory Storage for Rate Limiting
+117 | private class MemoryStorage {
+  |        `- note: class 'MemoryStorage' does not conform to the 'Sendable' protocol
+118 |   private var storage: [String: (value: Any, expiry: Date)] = [:]
+119 |   private let queue = DispatchQueue(label: "memory-storage", attributes: .concurrent)
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Middleware/AuthMiddleware.swift:133:13: warning: capture of 'self' with non-Sendable type 'MemoryStorage' in a '@Sendable' closure [#SendableClosureCaptures]
+115 | 
+116 | // MARK: - Simple Memory Storage for Rate Limiting
+117 | private class MemoryStorage {
+  |        `- note: class 'MemoryStorage' does not conform to the 'Sendable' protocol
+118 |   private var storage: [String: (value: Any, expiry: Date)] = [:]
+119 |   private let queue = DispatchQueue(label: "memory-storage", attributes: .concurrent)
+  :
+131 |   func set<T>(_ value: T, forKey key: String, expiresIn seconds: TimeInterval) {
+132 |     queue.async(flags: .barrier) {
+133 |       self.storage[key] = (value, Date().addingTimeInterval(seconds))
+  |       `- warning: capture of 'self' with non-Sendable type 'MemoryStorage' in a '@Sendable' closure [#SendableClosureCaptures]
+134 |     }
+135 |   }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Middleware/AuthMiddleware.swift:133:34: warning: capture of 'value' with non-Sendable type 'T' in a '@Sendable' closure [#SendableClosureCaptures]
+129 |   }
+130 |   
+131 |   func set<T>(_ value: T, forKey key: String, expiresIn seconds: TimeInterval) {
+  |       `- note: consider making generic parameter 'T' conform to the 'Sendable' protocol
+132 |     queue.async(flags: .barrier) {
+133 |       self.storage[key] = (value, Date().addingTimeInterval(seconds))
+  |                 `- warning: capture of 'value' with non-Sendable type 'T' in a '@Sendable' closure [#SendableClosureCaptures]
+134 |     }
+135 |   }
+
+[#SendableClosureCaptures]: <https://docs.swift.org/compiler/documentation/diagnostics/sendable-closure-captures>
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Middleware/AuthMiddleware.swift:75:17: warning: stored property 'storage' of 'Sendable'-conforming struct 'RateLimitMiddleware' has non-Sendable type 'MemoryStorage'
+ 73 |   private let maxAttempts: Int
+ 74 |   private let timeWindow: TimeInterval
+ 75 |   private let storage: MemoryStorage
+  |         `- warning: stored property 'storage' of 'Sendable'-conforming struct 'RateLimitMiddleware' has non-Sendable type 'MemoryStorage'
+ 76 |   
+ 77 |   init(maxAttempts: Int = 5, timeWindow: TimeInterval = 900) { // 5 attempts per 15 minutes
+  :
+115 | 
+116 | // MARK: - Simple Memory Storage for Rate Limiting
+117 | private class MemoryStorage {
+  |        `- note: class 'MemoryStorage' does not conform to the 'Sendable' protocol
+118 |   private var storage: [String: (value: Any, expiry: Date)] = [:]
+119 |   private let queue = DispatchQueue(label: "memory-storage", attributes: .concurrent)
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Middleware/AuthMiddleware.swift:133:13: warning: capture of 'self' with non-Sendable type 'MemoryStorage' in a '@Sendable' closure [#SendableClosureCaptures]
+115 | 
+116 | // MARK: - Simple Memory Storage for Rate Limiting
+117 | private class MemoryStorage {
+  |        `- note: class 'MemoryStorage' does not conform to the 'Sendable' protocol
+118 |   private var storage: [String: (value: Any, expiry: Date)] = [:]
+119 |   private let queue = DispatchQueue(label: "memory-storage", attributes: .concurrent)
+  :
+131 |   func set<T>(_ value: T, forKey key: String, expiresIn seconds: TimeInterval) {
+132 |     queue.async(flags: .barrier) {
+133 |       self.storage[key] = (value, Date().addingTimeInterval(seconds))
+  |       `- warning: capture of 'self' with non-Sendable type 'MemoryStorage' in a '@Sendable' closure [#SendableClosureCaptures]
+134 |     }
+135 |   }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Middleware/AuthMiddleware.swift:133:34: warning: capture of 'value' with non-Sendable type 'T' in a '@Sendable' closure [#SendableClosureCaptures]
+129 |   }
+130 |   
+131 |   func set<T>(_ value: T, forKey key: String, expiresIn seconds: TimeInterval) {
+  |       `- note: consider making generic parameter 'T' conform to the 'Sendable' protocol
+132 |     queue.async(flags: .barrier) {
+133 |       self.storage[key] = (value, Date().addingTimeInterval(seconds))
+  |                 `- warning: capture of 'value' with non-Sendable type 'T' in a '@Sendable' closure [#SendableClosureCaptures]
+134 |     }
+135 |   }
+
+[#SendableClosureCaptures]: <https://docs.swift.org/compiler/documentation/diagnostics/sendable-closure-captures>
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Middleware/AuthMiddleware.swift:75:17: warning: stored property 'storage' of 'Sendable'-conforming struct 'RateLimitMiddleware' has non-Sendable type 'MemoryStorage'
+ 73 |   private let maxAttempts: Int
+ 74 |   private let timeWindow: TimeInterval
+ 75 |   private let storage: MemoryStorage
+  |         `- warning: stored property 'storage' of 'Sendable'-conforming struct 'RateLimitMiddleware' has non-Sendable type 'MemoryStorage'
+ 76 |   
+ 77 |   init(maxAttempts: Int = 5, timeWindow: TimeInterval = 900) { // 5 attempts per 15 minutes
+  :
+115 | 
+116 | // MARK: - Simple Memory Storage for Rate Limiting
+117 | private class MemoryStorage {
+  |        `- note: class 'MemoryStorage' does not conform to the 'Sendable' protocol
+118 |   private var storage: [String: (value: Any, expiry: Date)] = [:]
+119 |   private let queue = DispatchQueue(label: "memory-storage", attributes: .concurrent)
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Middleware/AuthMiddleware.swift:133:13: warning: capture of 'self' with non-Sendable type 'MemoryStorage' in a '@Sendable' closure [#SendableClosureCaptures]
+115 | 
+116 | // MARK: - Simple Memory Storage for Rate Limiting
+117 | private class MemoryStorage {
+  |        `- note: class 'MemoryStorage' does not conform to the 'Sendable' protocol
+118 |   private var storage: [String: (value: Any, expiry: Date)] = [:]
+119 |   private let queue = DispatchQueue(label: "memory-storage", attributes: .concurrent)
+  :
+131 |   func set<T>(_ value: T, forKey key: String, expiresIn seconds: TimeInterval) {
+132 |     queue.async(flags: .barrier) {
+133 |       self.storage[key] = (value, Date().addingTimeInterval(seconds))
+  |       `- warning: capture of 'self' with non-Sendable type 'MemoryStorage' in a '@Sendable' closure [#SendableClosureCaptures]
+134 |     }
+135 |   }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Middleware/AuthMiddleware.swift:133:34: warning: capture of 'value' with non-Sendable type 'T' in a '@Sendable' closure [#SendableClosureCaptures]
+129 |   }
+130 |   
+131 |   func set<T>(_ value: T, forKey key: String, expiresIn seconds: TimeInterval) {
+  |       `- note: consider making generic parameter 'T' conform to the 'Sendable' protocol
+132 |     queue.async(flags: .barrier) {
+133 |       self.storage[key] = (value, Date().addingTimeInterval(seconds))
+  |                 `- warning: capture of 'value' with non-Sendable type 'T' in a '@Sendable' closure [#SendableClosureCaptures]
+134 |     }
+135 |   }
+
+[#SendableClosureCaptures]: <https://docs.swift.org/compiler/documentation/diagnostics/sendable-closure-captures>
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Middleware/AuthMiddleware.swift:75:17: warning: stored property 'storage' of 'Sendable'-conforming struct 'RateLimitMiddleware' has non-Sendable type 'MemoryStorage'
+ 73 |   private let maxAttempts: Int
+ 74 |   private let timeWindow: TimeInterval
+ 75 |   private let storage: MemoryStorage
+  |         `- warning: stored property 'storage' of 'Sendable'-conforming struct 'RateLimitMiddleware' has non-Sendable type 'MemoryStorage'
+ 76 |   
+ 77 |   init(maxAttempts: Int = 5, timeWindow: TimeInterval = 900) { // 5 attempts per 15 minutes
+  :
+115 | 
+116 | // MARK: - Simple Memory Storage for Rate Limiting
+117 | private class MemoryStorage {
+  |        `- note: class 'MemoryStorage' does not conform to the 'Sendable' protocol
+118 |   private var storage: [String: (value: Any, expiry: Date)] = [:]
+119 |   private let queue = DispatchQueue(label: "memory-storage", attributes: .concurrent)
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Migrations/CreateExpense.swift:8:26: error: cannot find type 'SQLDatabase' in scope
+ 6 |     var categoryEnum: DatabaseSchema.DataType = .string
+ 7 |     
+ 8 |     if !(database is SQLDatabase) {
+  |             `- error: cannot find type 'SQLDatabase' in scope
+ 9 |       let enumBuilder = try await database.enum("expense_category")
+10 |         .case("food")
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Migrations/CreateExpense.swift:44:26: error: cannot find type 'SQLDatabase' in scope
+42 |     
+43 |     // Only delete enum if it's PostgreSQL
+44 |     if !(database is SQLDatabase) {
+  |             `- error: cannot find type 'SQLDatabase' in scope
+45 |       try await database.enum("expense_category").delete()
+46 |     }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Models/RefreshToken.swift:34:32: error: missing argument for parameter 'on' in call
+32 |   var createdAt: Date?
+33 |   
+34 |   @Timestamp(key: "last_used")
+  |                `- error: missing argument for parameter 'on' in call
+35 |   var lastUsed: Date?
+36 |   
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/.build/checkouts/fluent-kit/Sources/FluentKit/Properties/Timestamp.swift:65:24: note: 'init(key:on:)' declared here
+ 63 | 
+ 64 | extension TimestampProperty where Format == DefaultTimestampFormat {
+ 65 |   public convenience init(key: FieldKey, on trigger: TimestampTrigger) {
+  |            `- note: 'init(key:on:)' declared here
+ 66 |     self.init(key: key, on: trigger, format: .default)
+ 67 |   }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Models/User.swift:77:1: error: type 'User' does not conform to protocol 'ModelAuthenticatable'
+ 75 | 
+ 76 | // MARK: - Authentication
+ 77 | extension User: ModelAuthenticatable {
+  | |- error: type 'User' does not conform to protocol 'ModelAuthenticatable'
+  | `- note: add stubs for conformance
+ 78 |   static let usernameKey = \User.$email
+  |        `- note: candidate has non-matching type 'any KeyPath<User, FieldProperty<User, String>> & Sendable'
+ 79 |   static let passwordHashKey = \User.$passwordHash
+  |        `- note: candidate has non-matching type 'any KeyPath<User, FieldProperty<User, String>> & Sendable'
+ 80 |   
+ 81 |   func verify(password: String) async throws -> Bool {
+  |     `- note: candidate is 'async', but protocol requirement is not
+ 82 |     try Bcrypt.verify(password, created: self.passwordHash)
+ 83 |   }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/.build/checkouts/fluent/Sources/Fluent/ModelAuthenticatable.swift:5:16: note: protocol requires property 'usernameKey' with type 'KeyPath<Self, FieldProperty<Self, String>>'
+ 3 | 
+ 4 | public protocol ModelAuthenticatable: Model, Authenticatable {
+ 5 |   static var usernameKey: KeyPath<Self, FieldProperty<Self, String>> { get }
+  |        `- note: protocol requires property 'usernameKey' with type 'KeyPath<Self, FieldProperty<Self, String>>'
+ 6 |   static var passwordHashKey: KeyPath<Self, FieldProperty<Self, String>> { get }
+  |        `- note: protocol requires property 'passwordHashKey' with type 'KeyPath<Self, FieldProperty<Self, String>>'
+ 7 |   func verify(password: String) throws -> Bool
+  |     `- note: protocol requires function 'verify(password:)' with type '(String) throws -> Bool'
+ 8 | }
+ 9 | 
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Services/EmailService.swift:67:20: error: type 'any Application.EmailServiceKey.Value' (aka 'any EmailServiceProtocol') does not conform to the 'Sendable' protocol
+ 1 | import Vapor
+ 2 | 
+ 3 | protocol EmailServiceProtocol {
+  |     `- note: protocol 'EmailServiceProtocol' does not conform to the 'Sendable' protocol
+ 4 |   func sendVerificationEmail(to email: String, token: String, baseURL: String) async throws
+ 5 |   func sendPasswordResetEmail(to email: String, token: String, baseURL: String) async throws
+  :
+65 | // MARK: - Application Extension
+66 | extension Application {
+67 |   private struct EmailServiceKey: StorageKey {
+  |          `- error: type 'any Application.EmailServiceKey.Value' (aka 'any EmailServiceProtocol') does not conform to the 'Sendable' protocol
+68 |     typealias Value = EmailServiceProtocol
+69 |   }
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Middleware/ErrorMiddleware.swift:37:22: warning: immutable value 'decodingError' was never used; consider replacing with '_' or removing it [#no-usage]
+35 |         reason = "Validation failed: \(validation.description)"
+36 |         
+37 |       case let decodingError as DecodingError:
+  |           `- warning: immutable value 'decodingError' was never used; consider replacing with '_' or removing it [#no-usage]
+38 |         status = .badRequest
+39 |         reason = "Invalid request data"
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Migrations/CreateExpense.swift:8:26: error: cannot find type 'SQLDatabase' in scope
+ 6 |     var categoryEnum: DatabaseSchema.DataType = .string
+ 7 |     
+ 8 |     if !(database is SQLDatabase) {
+  |             `- error: cannot find type 'SQLDatabase' in scope
+ 9 |       let enumBuilder = try await database.enum("expense_category")
+10 |         .case("food")
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Migrations/CreateExpense.swift:44:26: error: cannot find type 'SQLDatabase' in scope
+42 |     
+43 |     // Only delete enum if it's PostgreSQL
+44 |     if !(database is SQLDatabase) {
+  |             `- error: cannot find type 'SQLDatabase' in scope
+45 |       try await database.enum("expense_category").delete()
+46 |     }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Migrations/CreateRefreshToken.swift:19:24: error: cannot find type 'SQLDatabase' in scope
+17 |     
+18 |     // Set default values based on database type
+19 |     if database is SQLDatabase {
+  |            `- error: cannot find type 'SQLDatabase' in scope
+20 |       // For SQLite, we'll handle defaults in the model
+21 |       try await builder.create()
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Middleware/ErrorMiddleware.swift:37:22: warning: immutable value 'decodingError' was never used; consider replacing with '_' or removing it [#no-usage]
+35 |         reason = "Validation failed: \(validation.description)"
+36 |         
+37 |       case let decodingError as DecodingError:
+  |           `- warning: immutable value 'decodingError' was never used; consider replacing with '_' or removing it [#no-usage]
+38 |         status = .badRequest
+39 |         reason = "Invalid request data"
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Migrations/CreateExpense.swift:8:26: error: cannot find type 'SQLDatabase' in scope
+ 6 |     var categoryEnum: DatabaseSchema.DataType = .string
+ 7 |     
+ 8 |     if !(database is SQLDatabase) {
+  |             `- error: cannot find type 'SQLDatabase' in scope
+ 9 |       let enumBuilder = try await database.enum("expense_category")
+10 |         .case("food")
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Migrations/CreateExpense.swift:44:26: error: cannot find type 'SQLDatabase' in scope
+42 |     
+43 |     // Only delete enum if it's PostgreSQL
+44 |     if !(database is SQLDatabase) {
+  |             `- error: cannot find type 'SQLDatabase' in scope
+45 |       try await database.enum("expense_category").delete()
+46 |     }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Migrations/CreateRefreshToken.swift:19:24: error: cannot find type 'SQLDatabase' in scope
+17 |     
+18 |     // Set default values based on database type
+19 |     if database is SQLDatabase {
+  |            `- error: cannot find type 'SQLDatabase' in scope
+20 |       // For SQLite, we'll handle defaults in the model
+21 |       try await builder.create()
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Middleware/ErrorMiddleware.swift:37:22: warning: immutable value 'decodingError' was never used; consider replacing with '_' or removing it [#no-usage]
+35 |         reason = "Validation failed: \(validation.description)"
+36 |         
+37 |       case let decodingError as DecodingError:
+  |           `- warning: immutable value 'decodingError' was never used; consider replacing with '_' or removing it [#no-usage]
+38 |         status = .badRequest
+39 |         reason = "Invalid request data"
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Migrations/CreateExpense.swift:8:26: error: cannot find type 'SQLDatabase' in scope
+ 6 |     var categoryEnum: DatabaseSchema.DataType = .string
+ 7 |     
+ 8 |     if !(database is SQLDatabase) {
+  |             `- error: cannot find type 'SQLDatabase' in scope
+ 9 |       let enumBuilder = try await database.enum("expense_category")
+10 |         .case("food")
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Migrations/CreateExpense.swift:44:26: error: cannot find type 'SQLDatabase' in scope
+42 |     
+43 |     // Only delete enum if it's PostgreSQL
+44 |     if !(database is SQLDatabase) {
+  |             `- error: cannot find type 'SQLDatabase' in scope
+45 |       try await database.enum("expense_category").delete()
+46 |     }
+
+/Users/headie-one/Desktop/pocketpilot-api-v2/Sources/App/Migrations/CreateRefreshToken.swift:19:24: error: cannot find type 'SQLDatabase' in scope
+17 |     
+18 |     // Set default values based on database type
+19 |     if database is SQLDatabase {
+  |            `- error: cannot find type 'SQLDatabase' in scope
+20 |       // For SQLite, we'll handle defaults in the model
+21 |       try await builder.create()
+
+headie-one@Karombas-iMac pocketpilot-api-v2 % clear 18 |     // Set default values based on database type                
+19 |     if database is SQLDatabase {
+  |            `- error: cannot find type 'SQLDatabase' in scope
+20 |       // For SQLite, we'll handle defaults in the model
+21 |       try await builder.create()

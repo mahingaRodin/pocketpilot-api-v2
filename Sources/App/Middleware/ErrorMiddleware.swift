@@ -34,7 +34,7 @@ extension ErrorMiddleware {
                 status = .badRequest
                 reason = "Validation failed: \(validation.description)"
                 
-            case let decodingError as DecodingError:
+            case is DecodingError:
                 status = .badRequest
                 reason = "Invalid request data"
                 

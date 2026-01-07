@@ -1,4 +1,5 @@
 import Fluent
+import FluentSQLiteDriver
 
 struct CreateRefreshToken: AsyncMigration {
     func prepare(on database: Database) async throws {
@@ -16,7 +17,7 @@ struct CreateRefreshToken: AsyncMigration {
             .unique(on: "token")
         
         // Set default values based on database type
-        if database is SQLDatabase {
+        if let _ = database as? SQLiteDatabase {
             // For SQLite, we'll handle defaults in the model
             try await builder.create()
         } else {

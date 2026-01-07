@@ -9,21 +9,23 @@ struct JWTService {
     }
     
     func sign<Payload: JWTPayload>(_ payload: Payload) async throws -> String {
-        return try await application.jwt.sign(payload)
+        return try await application.jwt.signers.sign(payload, kid: nil)
     }
     
     func verify<Payload: JWTPayload>(_ token: String, as payload: Payload.Type) async throws -> Payload {
-        return try await application.jwt.verify(token, as: payload)
+        return try await application.jwt.signers.verify(token, as: payload)
     }
     
-    func generateUserToken(for user: User, expirationTime: TimeInterval = 86400 * 7) throws -> String {
+    func generateUserToken(for user: User, expirationTime: TimeInterval = 86400 * 7) async throws -> String {
         let payload = UserPayload(
             userID: user.id!,
             email: user.email,
+            tokenType: .access,
+            sessionID: UUID(),
             exp: .init(value: Date().addingTimeInterval(expirationTime))
         )
         
-        return try application.jwt.sign(payload)
+        return try await application.jwt.signers.sign(payload, kid: nil)
     }
 }
 

@@ -31,7 +31,7 @@ final class RefreshToken: Model, Content, @unchecked Sendable {
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
     
-    @Timestamp(key: "last_used")
+    @Timestamp(key: "last_used", on: .update)
     var lastUsed: Date?
     
     init() { }

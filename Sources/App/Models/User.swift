@@ -75,50 +75,12 @@ final class User: Model, Content, @unchecked Sendable {
 
 // MARK: - Authentication
 extension User: ModelAuthenticatable {
-    static let usernameKey = \User.$email
-    static let passwordHashKey = \User.$passwordHash
-    
-    func verify(password: String) throws -> Bool {
-        try Bcrypt.verify(password, created: self.passwordHash)
+    static var usernameKey: KeyPath<User, FieldProperty<User, String>> {
+        \User.$email
     }
-}
-
-// MARK: - JWT Payload
-struct UserPayload: JWTPayload {
-    var userID: UUID
-    var email: String
-    var exp: ExpirationClaim
-    
-    func verify(using signer: JWTSigner) throws {
-        try self.exp.verifyNotExpired()
+    static var passwordHashKey: KeyPath<User, FieldProperty<User, String>> {
+        \User.$passwordHash
     }
-
-    @Field(key: "email_verified")
-    var emailVerified: Bool
-
-    @OptionalField(key: "email_verification_token")
-    var emaiolVerificationToken: String?
-
-    @OptionalField(key: "password_reset_token")
-    var passwordResetToken: String?
-
-    @OptionalField(key: "password_reset_expires")
-    var passwordResetExpires: Date?
-
-    @Field(key: "failed_login_attempts")
-    var failedLoginAttempts: Int
-
-    @OptionalField(key: "locked_until")
-    var lockedUntil: Date?
-
-    @OptionalField(key: "last_login")
-    var lastLogin: Date;
-}
-
-// MARK: - Authentication
-extension User: ModelAuthenticatable {
-    static let usernameKey = \User.$email
-    static let passwordHashKey = \User.$passwordHash
     
     func verify(password: String) throws -> Bool {
         try Bcrypt.verify(password, created: self.passwordHash)
@@ -191,7 +153,6 @@ struct UserPayload: JWTPayload {
     var email: String
     var tokenType: TokenType
     var sessionID: UUID
-    var iat: IssuedAtClaim
     var exp: ExpirationClaim
     
     enum TokenType: String, Codable {

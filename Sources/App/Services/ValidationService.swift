@@ -53,9 +53,9 @@ extension Validator where T == String {
         .init {
             let validation = ValidationService.validatePassword($0)
             guard validation.isValid else {
-                return ValidatorResults.Failure(validation.errors.joined(separator: ", "))
+                return ValidatorResult.failure(validation.errors.joined(separator: ", "))
             }
-            return ValidatorResults.Success
+            return ValidatorResult.success
         }
     }
 }
@@ -64,9 +64,9 @@ extension Validator where T == Double {
     static var validAmount: Validator<T> {
         .init {
             guard ValidationService.validateAmount($0) else {
-                return ValidatorResults.Failure("Amount must be between 0.01 and 999,999.99")
+                return ValidatorResult.failure("Amount must be between 0.01 and 999,999.99")
             }
-            return ValidatorResults.Success
+            return ValidatorResult.success
         }
     }
 }

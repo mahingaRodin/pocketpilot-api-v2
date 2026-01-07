@@ -10,13 +10,11 @@ public func configure(_ app: Application) async throws {
     app.logger.info("Using SQLite database for Windows development")
     
     // Configure JWT
-    if let jwtSecret = Environment.get("JWT_SECRET") {
-        await app.jwt.keys.addHMAC(key: jwtSecret, digestAlgorithm: .sha256)
-    } else {
-        // Development fallback - use a default secret
-        await app.jwt.keys.addHMAC(key: "development-secret-key-not-for-production", digestAlgorithm: .sha256)
+    let jwtSecret = Environment.get("JWT_SECRET") ?? "development-secret-key-not-for-production"
+    if Environment.get("JWT_SECRET") == nil {
         app.logger.warning("Using default JWT secret - not suitable for production!")
     }
+    app.jwt.signers.use(.hs256(key: jwtSecret))
     
     // Add migrations
     app.migrations.add(CreateUser())

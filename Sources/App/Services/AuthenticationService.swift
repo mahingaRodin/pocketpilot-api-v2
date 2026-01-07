@@ -147,12 +147,14 @@ struct AuthenticationService {
                 .update()
         } else {
             // Revoke current session (fallback)
-            try await RefreshToken.query(on: req.db)
+            if let token = try await RefreshToken.query(on: req.db)
                 .filter(\.$user.$id == user.id!)
                 .filter(\.$revoked == false)
-                .sort(\.$lastUsed, .descending)
-                .first()?
-                .revoke()
+                .sort("last_used", .descending)
+                .first() {
+                token.revoke()
+                try await token.save(on: req.db)
+            }
         }
         
         return .noContent
@@ -345,11 +347,10 @@ extension AuthenticationService {
             email: user.email,
             tokenType: .access,
             sessionID: sessionID,
-            iat: .init(value: Date()),
             exp: .init(value: Date().addingTimeInterval(900)) // 15 minutes
         )
         
-        return try await app.jwt.sign(payload)
+        return try await app.jwt.signers.sign(payload, kid: nil)
     }
     
     // MARK: - Email Methods

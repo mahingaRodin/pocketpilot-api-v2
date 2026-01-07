@@ -1,11 +1,12 @@
 import Fluent
+import FluentSQLiteDriver
 
 struct CreateExpense: AsyncMigration {
     func prepare(on database: Database) async throws {
         // Create enum for PostgreSQL, skip for SQLite
         var categoryEnum: DatabaseSchema.DataType = .string
         
-        if !(database is SQLDatabase) {
+        if !(database is SQLiteDatabase) {
             let enumBuilder = try await database.enum("expense_category")
                 .case("food")
                 .case("transportation")
@@ -41,7 +42,7 @@ struct CreateExpense: AsyncMigration {
         try await database.schema("expenses").delete()
         
         // Only delete enum if it's PostgreSQL
-        if !(database is SQLDatabase) {
+        if !(database is SQLiteDatabase) {
             try await database.enum("expense_category").delete()
         }
     }

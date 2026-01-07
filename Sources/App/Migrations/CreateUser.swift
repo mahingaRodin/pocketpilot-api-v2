@@ -1,4 +1,5 @@
 import Fluent
+import FluentSQLiteDriver
 
 struct CreateUser: AsyncMigration {
     func prepare(on database: Database) async throws {
@@ -20,7 +21,7 @@ struct CreateUser: AsyncMigration {
             .unique(on: "email")
         
         // Set default values based on database type
-        if database is SQLDatabase {
+        if let _ = database as? SQLiteDatabase {
             // For SQLite, we'll handle defaults in the model
             try await builder.create()
         } else {

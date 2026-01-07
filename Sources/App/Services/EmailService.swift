@@ -1,6 +1,6 @@
 import Vapor
 
-protocol EmailServiceProtocol {
+protocol EmailServiceProtocol: Sendable {
     func sendVerificationEmail(to email: String, token: String, baseURL: String) async throws
     func sendPasswordResetEmail(to email: String, token: String, baseURL: String) async throws
     func sendPasswordChangedNotification(to email: String) async throws
