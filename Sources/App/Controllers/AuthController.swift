@@ -17,6 +17,7 @@ struct AuthController: RouteCollection {
         
         // Protected routes
         let protected = auth.grouped(JWTAuthenticator())
+        protected.get("me", use: getMe)
         protected.post("logout", use: logout)
         protected.post("logout", "all", use: logoutAllDevices)
         protected.post("password", "change", use: changePassword)
@@ -37,6 +38,11 @@ struct AuthController: RouteCollection {
         let loginRequest = try req.content.decode(UserLoginRequest.self)
         
         return try await req.authService.login(request: loginRequest, on: req)
+    }
+    
+    func getMe(req: Request) async throws -> UserResponse {
+        let user = try req.auth.require(User.self)
+        return UserResponse(user: user)
     }
     
     func refreshToken(req: Request) async throws -> AuthResponse {

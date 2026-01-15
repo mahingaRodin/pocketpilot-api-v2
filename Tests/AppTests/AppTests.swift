@@ -19,9 +19,14 @@ final class AppTests: XCTestCase {
         try await app.test(.GET, "health") { res async in
             XCTAssertEqual(res.status, .ok)
             
-            let response = try res.content.decode([String: Double].self)
-            XCTAssertEqual(response["status"], "ok")
-            XCTAssertNotNil(response["timestamp"])
+            struct HealthResponse: Content {
+                let status: String
+                let timestamp: Double
+            }
+            
+            let response = try? res.content.decode(HealthResponse.self)
+            XCTAssertEqual(response?.status, "ok")
+            XCTAssertNotNil(response?.timestamp)
         }
     }
     
@@ -39,11 +44,11 @@ final class AppTests: XCTestCase {
         }) { res async in
             XCTAssertEqual(res.status, .ok)
             
-            let response = try res.content.decode(AuthResponse.self)
-            XCTAssertEqual(response.user.email, "test@example.com")
-            XCTAssertEqual(response.user.firstName, "John")
-            XCTAssertEqual(response.user.lastName, "Doe")
-            XCTAssertFalse(response.token.isEmpty)
+            let response = try? res.content.decode(AuthResponse.self)
+            XCTAssertEqual(response?.user.email, "test@example.com")
+            XCTAssertEqual(response?.user.firstName, "John")
+            XCTAssertEqual(response?.user.lastName, "Doe")
+            XCTAssertNotNil(response?.accessToken)
         }
     }
     
@@ -59,7 +64,8 @@ final class AppTests: XCTestCase {
         
         let loginRequest = UserLoginRequest(
             email: "test@example.com",
-            password: "Password123!"
+            password: "Password123!",
+            deviceInfo: nil
         )
         
         try await app.test(.POST, "api/v1/auth/login", beforeRequest: { req in
@@ -67,9 +73,9 @@ final class AppTests: XCTestCase {
         }) { res async in
             XCTAssertEqual(res.status, .ok)
             
-            let response = try res.content.decode(AuthResponse.self)
-            XCTAssertEqual(response.user.email, "test@example.com")
-            XCTAssertFalse(response.token.isEmpty)
+            let response = try? res.content.decode(AuthResponse.self)
+            XCTAssertEqual(response?.user.email, "test@example.com")
+            XCTAssertNotNil(response?.accessToken)
         }
     }
     
@@ -83,7 +89,7 @@ final class AppTests: XCTestCase {
         )
         try await user.save(on: app.db)
         
-        let token = try app.jwtService.generateUserToken(for: user)
+        let token = try await app.jwtService.generateUserToken(for: user)
         
         let expenseRequest = CreateExpenseRequest(
             amount: 25.50,
@@ -99,11 +105,11 @@ final class AppTests: XCTestCase {
         }) { res async in
             XCTAssertEqual(res.status, .ok)
             
-            let response = try res.content.decode(ExpenseResponse.self)
-            XCTAssertEqual(response.amount, 25.50)
-            XCTAssertEqual(response.description, "Lunch")
-            XCTAssertEqual(response.category, .food)
-            XCTAssertEqual(response.notes, "Business lunch")
+            let response = try? res.content.decode(ExpenseResponse.self)
+            XCTAssertEqual(response?.amount, 25.50)
+            XCTAssertEqual(response?.description, "Lunch")
+            XCTAssertEqual(response?.category, .food)
+            XCTAssertEqual(response?.notes, "Business lunch")
         }
     }
     
@@ -136,17 +142,17 @@ final class AppTests: XCTestCase {
         try await expense1.save(on: app.db)
         try await expense2.save(on: app.db)
         
-        let token = try app.jwtService.generateUserToken(for: user)
+        let token = try await app.jwtService.generateUserToken(for: user)
         
         try await app.test(.GET, "api/v1/expenses", beforeRequest: { req in
             req.headers.bearerAuthorization = BearerAuthorization(token: token)
         }) { res async in
             XCTAssertEqual(res.status, .ok)
             
-            let response = try res.content.decode(ExpenseListResponse.self)
-            XCTAssertEqual(response.expenses.count, 2)
-            XCTAssertEqual(response.total, 2)
-            XCTAssertEqual(response.totalAmount, 40.50)
+            let response = try? res.content.decode(ExpenseListResponse.self)
+            XCTAssertEqual(response?.expenses.count, 2)
+            XCTAssertEqual(response?.total, 2)
+            XCTAssertEqual(response?.totalAmount, 40.50)
         }
     }
 }

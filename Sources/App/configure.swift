@@ -24,7 +24,6 @@ public func configure(_ app: Application) async throws {
     // Add middleware
     app.middleware.use(ErrorMiddleware.default(environment: app.environment))
     app.middleware.use(RateLimitMiddleware())
-    app.middleware.use(AuthMiddleware())
     
     // Register routes
     try routes(app)
