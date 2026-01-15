@@ -16,6 +16,16 @@ public func configure(_ app: Application) async throws {
     }
     app.jwt.signers.use(.hs256(key: jwtSecret))
     
+    // Configure JSON encoder/decoder for ISO 8601 dates
+    let encoder = JSONEncoder()
+    encoder.dateEncodingStrategy = .iso8601
+    
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .iso8601
+    
+    ContentConfiguration.global.use(encoder: encoder, for: .json)
+    ContentConfiguration.global.use(decoder: decoder, for: .json)
+    
     // Add migrations
     app.migrations.add(CreateUser())
     app.migrations.add(CreateRefreshToken())

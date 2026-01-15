@@ -21,10 +21,10 @@ struct JWTAuthenticator: AsyncJWTAuthenticator {
             throw Abort(.locked, reason: "Account is temporarily locked")
         }
         
-        // Check if user email is verified for sensitive operations
-        if !user.emailVerified && requiresEmailVerification(request.url.path) {
-            throw Abort(.forbidden, reason: "Email verification required")
-        }
+        // Email verification disabled
+        // if !user.emailVerified && requiresEmailVerification(request.url.path) {
+        //     throw Abort(.forbidden, reason: "Email verification required")
+        // }
         
         request.auth.login(user)
 //        request.auth.login(jwt) // Also store the JWT payload for session info

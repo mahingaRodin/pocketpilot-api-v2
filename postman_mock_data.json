@@ -1,0 +1,291 @@
+{
+  "test_cases": [
+    {
+      "name": "Basic Expense - Food",
+      "description": "Simple food expense with all required fields",
+      "request_body": {
+        "amount": 45.50,
+        "description": "Lunch at Italian restaurant",
+        "category": "food",
+        "date": "2026-01-15T12:30:00Z",
+        "notes": "Team lunch meeting"
+      }
+    },
+    {
+      "name": "Transportation Expense",
+      "description": "Uber ride with minimal notes",
+      "request_body": {
+        "amount": 18.75,
+        "description": "Uber to office",
+        "category": "transportation",
+        "date": "2026-01-15T08:15:00Z",
+        "notes": "Morning commute"
+      }
+    },
+    {
+      "name": "Entertainment - No Notes",
+      "description": "Entertainment expense without optional notes field",
+      "request_body": {
+        "amount": 89.99,
+        "description": "Movie tickets and popcorn",
+        "category": "entertainment",
+        "date": "2026-01-14T19:00:00Z"
+      }
+    },
+    {
+      "name": "Shopping Expense",
+      "description": "Large shopping expense",
+      "request_body": {
+        "amount": 234.50,
+        "description": "New work clothes",
+        "category": "shopping",
+        "date": "2026-01-13T15:45:00Z",
+        "notes": "Bought 2 shirts and 1 pair of pants for upcoming presentation"
+      }
+    },
+    {
+      "name": "Bills - Electricity",
+      "description": "Monthly utility bill",
+      "request_body": {
+        "amount": 125.00,
+        "description": "Electricity bill for December",
+        "category": "bills",
+        "date": "2026-01-10T00:00:00Z",
+        "notes": "Payment reference: ELEC-2025-12"
+      }
+    },
+    {
+      "name": "Healthcare Expense",
+      "description": "Medical appointment",
+      "request_body": {
+        "amount": 75.00,
+        "description": "Doctor consultation",
+        "category": "healthcare",
+        "date": "2026-01-12T10:30:00Z",
+        "notes": "Annual checkup - covered by insurance"
+      }
+    },
+    {
+      "name": "Education - Online Course",
+      "description": "Professional development",
+      "request_body": {
+        "amount": 199.99,
+        "description": "Swift programming course",
+        "category": "education",
+        "date": "2026-01-08T00:00:00Z",
+        "notes": "Udemy course - Advanced iOS Development"
+      }
+    },
+    {
+      "name": "Travel Expense",
+      "description": "Business trip hotel",
+      "request_body": {
+        "amount": 450.00,
+        "description": "Hotel accommodation for conference",
+        "category": "travel",
+        "date": "2026-01-05T00:00:00Z",
+        "notes": "3 nights at Hilton - Conference in Nairobi"
+      }
+    },
+    {
+      "name": "Groceries - Weekly Shopping",
+      "description": "Regular grocery shopping",
+      "request_body": {
+        "amount": 156.80,
+        "description": "Weekly groceries from Carrefour",
+        "category": "groceries",
+        "date": "2026-01-14T17:00:00Z",
+        "notes": "Fruits, vegetables, meat, and household items"
+      }
+    },
+    {
+      "name": "Utilities - Internet",
+      "description": "Monthly internet bill",
+      "request_body": {
+        "amount": 65.00,
+        "description": "Internet service - January",
+        "category": "utilities",
+        "date": "2026-01-01T00:00:00Z",
+        "notes": "Safaricom fiber 100Mbps"
+      }
+    },
+    {
+      "name": "Rent Payment",
+      "description": "Monthly rent",
+      "request_body": {
+        "amount": 1200.00,
+        "description": "January rent payment",
+        "category": "rent",
+        "date": "2026-01-01T00:00:00Z",
+        "notes": "Apartment 3B - Paid via M-Pesa"
+      }
+    },
+    {
+      "name": "Insurance - Car",
+      "description": "Quarterly car insurance",
+      "request_body": {
+        "amount": 350.00,
+        "description": "Car insurance Q1 2026",
+        "category": "insurance",
+        "date": "2026-01-03T00:00:00Z",
+        "notes": "Comprehensive coverage - Policy #INS-2026-001"
+      }
+    },
+    {
+      "name": "Other - Pet Supplies",
+      "description": "Miscellaneous expense",
+      "request_body": {
+        "amount": 42.30,
+        "description": "Dog food and treats",
+        "category": "other",
+        "date": "2026-01-11T14:20:00Z",
+        "notes": "Monthly pet supplies"
+      }
+    },
+    {
+      "name": "Minimum Amount Test",
+      "description": "Testing minimum valid amount (0.01)",
+      "request_body": {
+        "amount": 0.01,
+        "description": "Candy from vending machine",
+        "category": "food",
+        "date": "2026-01-15T16:00:00Z"
+      }
+    },
+    {
+      "name": "Large Amount Test",
+      "description": "Testing large expense amount",
+      "request_body": {
+        "amount": 5000.00,
+        "description": "New laptop for work",
+        "category": "shopping",
+        "date": "2026-01-07T00:00:00Z",
+        "notes": "MacBook Pro M3 - Business expense"
+      }
+    },
+    {
+      "name": "Maximum Description Length",
+      "description": "Testing description at max length (255 chars)",
+      "request_body": {
+        "amount": 99.99,
+        "description": "This is a very long description to test the maximum character limit for expense descriptions in the API. It needs to be exactly at or near the 255 character limit to ensure proper validation. Adding more text here to reach that limit properly.",
+        "category": "other",
+        "date": "2026-01-15T00:00:00Z",
+        "notes": "Testing max length"
+      }
+    },
+    {
+      "name": "Maximum Notes Length",
+      "description": "Testing notes at max length (500 chars)",
+      "request_body": {
+        "amount": 150.00,
+        "description": "Expense with very long notes",
+        "category": "other",
+        "date": "2026-01-15T00:00:00Z",
+        "notes": "This is a very long note to test the maximum character limit for expense notes in the API. It needs to be exactly at or near the 500 character limit to ensure proper validation. Adding more text here to reach that limit properly and make sure the validation works correctly. This should include enough characters to test the boundary condition. Let me add even more text to ensure we reach the 500 character limit for this test case. Almost there now, just need a few more words to complete this test."
+      }
+    }
+  ],
+  "invalid_test_cases": [
+    {
+      "name": "Invalid - Negative Amount",
+      "description": "Should fail validation (amount must be >= 0.01)",
+      "request_body": {
+        "amount": -10.00,
+        "description": "Invalid negative amount",
+        "category": "food",
+        "date": "2026-01-15T00:00:00Z"
+      },
+      "expected_error": "Validation error: amount must be at least 0.01"
+    },
+    {
+      "name": "Invalid - Zero Amount",
+      "description": "Should fail validation (amount must be >= 0.01)",
+      "request_body": {
+        "amount": 0.00,
+        "description": "Invalid zero amount",
+        "category": "food",
+        "date": "2026-01-15T00:00:00Z"
+      },
+      "expected_error": "Validation error: amount must be at least 0.01"
+    },
+    {
+      "name": "Invalid - Empty Description",
+      "description": "Should fail validation (description cannot be empty)",
+      "request_body": {
+        "amount": 50.00,
+        "description": "",
+        "category": "food",
+        "date": "2026-01-15T00:00:00Z"
+      },
+      "expected_error": "Validation error: description cannot be empty"
+    },
+    {
+      "name": "Invalid - Missing Required Field",
+      "description": "Should fail validation (missing category)",
+      "request_body": {
+        "amount": 50.00,
+        "description": "Missing category field",
+        "date": "2026-01-15T00:00:00Z"
+      },
+      "expected_error": "Missing required field: category"
+    },
+    {
+      "name": "Invalid - Invalid Category",
+      "description": "Should fail validation (invalid category value)",
+      "request_body": {
+        "amount": 50.00,
+        "description": "Invalid category test",
+        "category": "invalid_category",
+        "date": "2026-01-15T00:00:00Z"
+      },
+      "expected_error": "Invalid category value"
+    },
+    {
+      "name": "Invalid - Description Too Long",
+      "description": "Should fail validation (description > 255 chars)",
+      "request_body": {
+        "amount": 50.00,
+        "description": "This description is intentionally way too long and exceeds the maximum allowed length of 255 characters. It should trigger a validation error when submitted to the API. Adding even more text here to ensure we definitely exceed the limit and test the validation properly. This is definitely over 255 characters now and should fail.",
+        "category": "food",
+        "date": "2026-01-15T00:00:00Z"
+      },
+      "expected_error": "Validation error: description must be at most 255 characters"
+    }
+  ],
+  "postman_instructions": {
+    "endpoint": "POST /api/v1/expenses",
+    "authentication": "Bearer Token (JWT)",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer YOUR_JWT_TOKEN_HERE"
+    },
+    "steps": [
+      "1. First, authenticate using the login endpoint to get your JWT token",
+      "2. Copy the token from the login response",
+      "3. In Postman, go to the Authorization tab and select 'Bearer Token'",
+      "4. Paste your JWT token in the Token field",
+      "5. Select the POST method and enter the URL: http://127.0.0.1:8080/api/v1/expenses",
+      "6. Go to the Body tab and select 'raw' and 'JSON'",
+      "7. Copy any request_body from the test_cases above and paste it",
+      "8. Click Send to test the API",
+      "9. You should receive a 200 OK response with the created expense details"
+    ],
+    "valid_categories": [
+      "food",
+      "transportation",
+      "entertainment",
+      "shopping",
+      "bills",
+      "healthcare",
+      "education",
+      "travel",
+      "groceries",
+      "utilities",
+      "rent",
+      "insurance",
+      "other"
+    ],
+    "date_format_notes": "Dates should be in ISO 8601 format (YYYY-MM-DDTHH:mm:ssZ). Vapor will automatically parse this format."
+  }
+}

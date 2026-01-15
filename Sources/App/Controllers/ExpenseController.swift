@@ -88,8 +88,20 @@ struct ExpenseController: RouteCollection {
     func create(req: Request) async throws -> ExpenseResponse {
         let user = try req.auth.require(User.self)
         
-        try CreateExpenseRequest.validate(content: req)
         let createRequest = try req.content.decode(CreateExpenseRequest.self)
+        
+        // Manual validation checks
+        guard createRequest.amount >= 0.01 else {
+            throw Abort(.badRequest, reason: "Amount must be at least 0.01")
+        }
+        
+        guard !createRequest.description.isEmpty && createRequest.description.count <= 255 else {
+            throw Abort(.badRequest, reason: "Description must be between 1 and 255 characters")
+        }
+        
+        if let notes = createRequest.notes, notes.count > 500 {
+            throw Abort(.badRequest, reason: "Notes must be at most 500 characters")
+        }
         
         let expense = Expense(
             userID: user.id!,

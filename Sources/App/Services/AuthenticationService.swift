@@ -28,22 +28,22 @@ struct AuthenticationService {
         // Hash password
         let hashedPassword = try Bcrypt.hash(request.password)
         
-        // Create user
+        // Create user (email verification disabled)
         let user = User(
             email: request.email,
             passwordHash: hashedPassword,
             firstName: request.firstName,
             lastName: request.lastName,
-            emailVerified: false
+            emailVerified: true  // Email verification disabled
         )
         
-        // Generate email verification token
-        let verificationToken = user.generateEmailVerificationToken()
+        // Email verification disabled - no token generation needed
+        // let verificationToken = user.generateEmailVerificationToken()
         
         try await user.save(on: req.db)
         
-        // Send verification email
-        try await sendVerificationEmail(to: user.email, token: verificationToken, on: req)
+        // Email verification disabled - no verification email sent
+        // try await sendVerificationEmail(to: user.email, token: verificationToken, on: req)
         
         // Generate tokens
         let sessionID = UUID()
