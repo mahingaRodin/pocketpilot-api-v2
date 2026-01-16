@@ -24,4 +24,7 @@ func routes(_ app: Application) throws {
     
     // Expense routes
     try api.register(collection: ExpenseController())
+
+    // Receipt routes
+    try api.register(collection: ReceiptController())
 }

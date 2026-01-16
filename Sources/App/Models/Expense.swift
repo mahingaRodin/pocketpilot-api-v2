@@ -25,6 +25,9 @@ final class Expense: Model, Content, @unchecked Sendable {
     @OptionalField(key: "notes")
     var notes: String?
     
+    @OptionalField(key: "receipt_url")
+    var receiptURL: String?
+    
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
     

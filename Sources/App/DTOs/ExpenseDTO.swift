@@ -40,6 +40,7 @@ struct ExpenseResponse: Content {
     let categoryIcon: String
     let date: Date
     let notes: String?
+    let receiptURL: String?
     let createdAt: Date?
     let updatedAt: Date?
     
@@ -52,6 +53,7 @@ struct ExpenseResponse: Content {
         self.categoryIcon = expense.category.icon
         self.date = expense.date
         self.notes = expense.notes
+        self.receiptURL = expense.receiptURL
         self.createdAt = expense.createdAt
         self.updatedAt = expense.updatedAt
     }

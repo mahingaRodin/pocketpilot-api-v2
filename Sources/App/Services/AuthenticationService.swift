@@ -59,7 +59,7 @@ struct AuthenticationService {
             user: UserResponse(user: user),
             accessToken: accessToken,
             refreshToken: refreshToken,
-            expiresIn: 900 // 15 minutes
+            expiresIn: 86400 // 24 hours
         )
     }
     
@@ -101,7 +101,7 @@ struct AuthenticationService {
             user: UserResponse(user: user),
             accessToken: accessToken,
             refreshToken: refreshToken,
-            expiresIn: 900 // 15 minutes
+            expiresIn: 86400 // 24 hours
         )
     }
     
@@ -133,7 +133,7 @@ struct AuthenticationService {
             user: UserResponse(user: refreshToken.user),
             accessToken: accessToken,
             refreshToken: token, // Keep same refresh token
-            expiresIn: 900 // 15 minutes
+            expiresIn: 86400 // 24 hours
         )
     }
     
@@ -347,7 +347,7 @@ extension AuthenticationService {
             email: user.email,
             tokenType: .access,
             sessionID: sessionID,
-            exp: .init(value: Date().addingTimeInterval(900)) // 15 minutes
+            exp: .init(value: Date().addingTimeInterval(86400)) // 24 hours
         )
         
         return try await app.jwt.signers.sign(payload, kid: nil)

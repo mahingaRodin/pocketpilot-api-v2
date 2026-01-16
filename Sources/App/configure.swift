@@ -11,6 +11,9 @@ public func configure(_ app: Application) throws {
     // Database
     app.databases.use(.sqlite(.file("db.sqlite")), as: .sqlite)
     app.logger.info("Using SQLite database")
+    
+    // Increase max body size to 20MB to handle receipt images
+    app.routes.defaultMaxBodySize = "20mb"
 
     // JWT
     let jwtSecret = Environment.get("JWT_SECRET")
@@ -36,6 +39,7 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CreateUser())
     app.migrations.add(CreateRefreshToken())
     app.migrations.add(CreateExpense())
+    app.migrations.add(AddReceiptURLToExpenses())
 
     // Middleware
     app.middleware.use(ErrorMiddleware.default(environment: app.environment))
