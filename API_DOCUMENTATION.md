@@ -3,7 +3,7 @@
 Welcome to the PocketPilot API documentation. This document provides an overview of the available endpoints, authentication mechanisms, and examples for testing.
 
 ## Base URL
-The API is accessible at: `http://localhost:8080/api/v1`
+The API is accessible at: `http://10.12.73.61:8080/api/v1`
 
 ---
 
@@ -31,7 +31,7 @@ Create a new user account.
 ```
 - **Example:**
 ```bash
-curl -X POST http://localhost:8080/api/v1/auth/register \
+curl -X POST http://10.12.73.61:8080/api/v1/auth/register \
      -H "Content-Type: application/json" \
      -d '{"email": "user@example.com", "password": "StrongPassword123!", "confirmPassword": "StrongPassword123!", "firstName": "John", "lastName": "Doe"}'
 ```
@@ -50,7 +50,7 @@ Authenticate and receive tokens.
 ```
 - **Example:**
 ```bash
-curl -X POST http://localhost:8080/api/v1/auth/login \
+curl -X POST http://10.12.73.61:8080/api/v1/auth/login \
      -H "Content-Type: application/json" \
      -d '{"email": "user@example.com", "password": "StrongPassword123!"}'
 ```
@@ -74,7 +74,7 @@ Get current user information.
 - **Endpoint:** `GET /auth/me`
 - **Example:**
 ```bash
-curl -X GET http://localhost:8080/api/v1/auth/me \
+curl -X GET http://10.12.73.61:8080/api/v1/auth/me \
      -H "Authorization: Bearer <your_access_token>"
 ```
 
@@ -86,7 +86,7 @@ Retrieve summary data for the dashboard.
 - **Endpoint:** `GET /dashboard`
 - **Example:**
 ```bash
-curl -X GET http://localhost:8080/api/v1/dashboard \
+curl -X GET http://10.12.73.61:8080/api/v1/dashboard \
      -H "Authorization: Bearer <your_access_token>"
 ```
 
@@ -106,7 +106,7 @@ List all expenses with filtering and pagination.
   - `sortOrder`: `asc` or `desc`
 - **Example:**
 ```bash
-curl -X GET "http://localhost:8080/api/v1/expenses?page=1&perPage=10&sortBy=date&sortOrder=desc" \
+curl -X GET "http://10.12.73.61:8080/api/v1/expenses?page=1&perPage=10&sortBy=date&sortOrder=desc" \
      -H "Authorization: Bearer <your_access_token>"
 ```
 
@@ -127,7 +127,7 @@ Add a new expense.
 ```
 - **Example:**
 ```bash
-curl -X POST http://localhost:8080/api/v1/expenses \
+curl -X POST http://10.12.73.61:8080/api/v1/expenses \
      -H "Authorization: Bearer <your_access_token>" \
      -H "Content-Type: application/json" \
      -d '{"amount": 42.50, "description": "Lunch at Cafe", "category": "food", "date": "2026-01-15T12:00:00Z"}'
