@@ -56,11 +56,28 @@ struct ReceiptController: RouteCollection {
             let amount: Double
             let description: String
             let category: String
-            let date: Date
+            let date: String
             let notes: String?
         }
         
         let upload = try req.content.decode(UploadAndCreateRequest.self)
+        
+        // Parse date
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        
+        // Try with fractional seconds first
+        var validDate: Date? = formatter.date(from: upload.date)
+        
+        if validDate == nil {
+            // Try without fractional seconds
+            formatter.formatOptions = [.withInternetDateTime]
+            validDate = formatter.date(from: upload.date)
+        }
+        
+        guard let date = validDate else {
+            throw Abort(.badRequest, reason: "Invalid date format")
+        }
         
         // Save image if provided
         var receiptURL: String? = nil
@@ -76,17 +93,17 @@ struct ReceiptController: RouteCollection {
             category = matched
         } else {
             // Try to map from display name or other common terms if needed, otherwise fallback
-             // map "Food" -> .food
-             switch upload.category.lowercased() {
-             case "food": category = .food
-             case "shopping": category = .shopping
-             case "transport": category = .transportation
-             case "entertainment": category = .entertainment
-             case "healthcare": category = .healthcare
-             case "utilities": category = .utilities
-             case "travel": category = .travel
-             default: category = .other
-             }
+            // map "Food" -> .food
+            switch upload.category.lowercased() {
+            case "food": category = .food
+            case "shopping": category = .shopping
+            case "transport": category = .transportation
+            case "entertainment": category = .entertainment
+            case "healthcare": category = .healthcare
+            case "utilities": category = .utilities
+            case "travel": category = .travel
+            default: category = .other
+            }
         }
         
         // Create expense
@@ -95,7 +112,7 @@ struct ReceiptController: RouteCollection {
             amount: upload.amount,
             description: upload.description,
             category: category,
-            date: upload.date,
+            date: date,
             notes: upload.notes
         )
         

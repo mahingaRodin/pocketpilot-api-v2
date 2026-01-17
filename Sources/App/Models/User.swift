@@ -47,6 +47,9 @@ final class User: Model, Content, @unchecked Sendable {
     @Timestamp(key: "updated_at", on: .update)
     var updatedAt: Date?
     
+    @OptionalField(key: "profile_picture_url")
+    var profilePictureURL: String?
+    
     @Children(for: \.$user)
     var expenses: [Expense]
     

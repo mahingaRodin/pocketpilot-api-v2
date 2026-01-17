@@ -19,7 +19,7 @@ struct CreateExpenseRequest: Content, Validatable {
 struct UpdateExpenseRequest: Content, Validatable {
     let amount: Double?
     let description: String?
-    let category: ExpenseCategory?
+    let category: String?
     let date: Date?
     let notes: String?
     

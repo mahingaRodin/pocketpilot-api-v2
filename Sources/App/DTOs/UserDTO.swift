@@ -85,6 +85,7 @@ struct UserResponse: Content {
     let firstName: String
     let lastName: String
     let emailVerified: Bool
+    let profilePictureURL: String?
     let lastLogin: Date?
     let createdAt: Date?
     
@@ -94,6 +95,7 @@ struct UserResponse: Content {
         self.firstName = user.firstName
         self.lastName = user.lastName
         self.emailVerified = user.emailVerified
+        self.profilePictureURL = user.profilePictureURL
         self.lastLogin = user.lastLogin
         self.createdAt = user.createdAt
     }

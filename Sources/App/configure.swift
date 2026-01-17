@@ -40,6 +40,7 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CreateRefreshToken())
     app.migrations.add(CreateExpense())
     app.migrations.add(AddReceiptURLToExpenses())
+    app.migrations.add(AddProfilePictureToUsers())
 
     // Middleware
     app.middleware.use(ErrorMiddleware.default(environment: app.environment))

@@ -151,28 +151,76 @@ struct ExpenseController: RouteCollection {
         try UpdateExpenseRequest.validate(content: req)
         let updateRequest = try req.content.decode(UpdateExpenseRequest.self)
         
+        // Track if we need to regenerate receipt
+        var shouldRegenerateReceipt = false
+        
         // Update fields if provided
         if let amount = updateRequest.amount {
             expense.amount = amount
+            shouldRegenerateReceipt = true
         }
         
         if let description = updateRequest.description {
             expense.description = description
+            shouldRegenerateReceipt = true
         }
         
-        if let category = updateRequest.category {
+        if let categoryString = updateRequest.category {
+            // Parse category from string (supports both rawValue and displayName)
+            guard let category = ExpenseCategory.from(categoryString) else {
+                throw Abort(.badRequest, reason: "Invalid category: '\(categoryString)'. Use rawValue (e.g., 'food') or displayName (e.g., 'Food & Dining')")
+            }
             expense.category = category
+            shouldRegenerateReceipt = true
         }
         
         if let date = updateRequest.date {
             expense.date = date
+            shouldRegenerateReceipt = true
         }
         
         if let notes = updateRequest.notes {
             expense.notes = notes
+            shouldRegenerateReceipt = true
         }
         
         try await expense.save(on: req.db)
+        
+        // Regenerate receipt if expense data changed
+        if shouldRegenerateReceipt {
+            // Delete old receipt file if it exists
+            if let oldReceiptURL = expense.receiptURL {
+                let directory = req.application.directory.publicDirectory
+                let relativePath = String(oldReceiptURL.dropFirst()) // Remove leading /
+                let fullPath = directory + relativePath
+                
+                // Try to delete old receipt file (ignore errors if file doesn't exist)
+                try? FileManager.default.removeItem(atPath: fullPath)
+            }
+            
+            // Generate new receipt
+            let generated = try ReceiptGenerationService.generate(for: expense)
+            
+            // Save HTML to file
+            let fileName = "\(UUID().uuidString).html"
+            let receiptsDirectory = req.application.directory.publicDirectory + "receipts/"
+            
+            try FileManager.default.createDirectory(
+                atPath: receiptsDirectory,
+                withIntermediateDirectories: true
+            )
+            
+            let filePath = receiptsDirectory + fileName
+            try generated.html.write(
+                to: URL(fileURLWithPath: filePath),
+                atomically: true,
+                encoding: .utf8
+            )
+            
+            // Update expense with new receipt URL
+            expense.receiptURL = "/receipts/\(fileName)"
+            try await expense.save(on: req.db)
+        }
         
         return ExpenseResponse(expense: expense)
     }

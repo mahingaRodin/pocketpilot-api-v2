@@ -51,6 +51,27 @@ enum ExpenseCategory: String, CaseIterable, Codable {
         case .other: return "📦"
         }
     }
+    
+    /// Parse category from either rawValue or displayName
+    static func from(_ string: String) -> ExpenseCategory? {
+        // Try rawValue first
+        if let category = ExpenseCategory(rawValue: string.lowercased()) {
+            return category
+        }
+        
+        // Try displayName mapping
+        let normalized = string.lowercased().trimmingCharacters(in: .whitespaces)
+        switch normalized {
+        case "food & dining", "food and dining":
+            return .food
+        case "bills & utilities", "bills and utilities":
+            return .bills
+        case "rent & housing", "rent and housing":
+            return .rent
+        default:
+            return nil
+        }
+    }
 }
 
 struct CategoryResponse: Content {
