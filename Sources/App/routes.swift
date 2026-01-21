@@ -33,4 +33,7 @@ func routes(_ app: Application) throws {
     
     // Notification routes
     try api.register(collection: NotificationController())
+    
+    // Report routes
+    try api.register(collection: ReportController())
 }
