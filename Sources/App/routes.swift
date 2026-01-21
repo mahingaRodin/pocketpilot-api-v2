@@ -13,6 +13,9 @@ func routes(_ app: Application) throws {
     // API v1 routes
     let api = app.grouped("api", "v1")
     
+    // Budget routes
+    try api.register(collection: BudgetController())
+    
     // Auth routes
     try api.register(collection: AuthController())
     

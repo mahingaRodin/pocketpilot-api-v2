@@ -103,11 +103,15 @@ struct ExpenseController: RouteCollection {
             throw Abort(.badRequest, reason: "Notes must be at most 500 characters")
         }
         
+        guard let category = ExpenseCategory.from(createRequest.category) else {
+            throw Abort(.badRequest, reason: "Invalid expense category: \(createRequest.category)")
+        }
+        
         let expense = Expense(
             userID: user.id!,
             amount: createRequest.amount,
             description: createRequest.description,
-            category: createRequest.category,
+            category: category,
             date: createRequest.date,
             notes: createRequest.notes
         )

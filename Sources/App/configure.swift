@@ -41,6 +41,7 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CreateExpense())
     app.migrations.add(AddReceiptURLToExpenses())
     app.migrations.add(AddProfilePictureToUsers())
+    app.migrations.add(CreateBudget())
 
     // Middleware
     app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
