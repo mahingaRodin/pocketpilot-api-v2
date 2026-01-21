@@ -88,23 +88,7 @@ struct ReceiptController: RouteCollection {
         }
         
         // Parse category string to enum, default to .other if invalid
-        let category: ExpenseCategory
-        if let matched = ExpenseCategory.allCases.first(where: { $0.rawValue.lowercased() == upload.category.lowercased() }) {
-            category = matched
-        } else {
-            // Try to map from display name or other common terms if needed, otherwise fallback
-            // map "Food" -> .food
-            switch upload.category.lowercased() {
-            case "food": category = .food
-            case "shopping": category = .shopping
-            case "transport": category = .transportation
-            case "entertainment": category = .entertainment
-            case "healthcare": category = .healthcare
-            case "utilities": category = .utilities
-            case "travel": category = .travel
-            default: category = .other
-            }
-        }
+        let category = ExpenseCategory.from(upload.category) ?? .other
         
         // Create expense
         let expense = Expense(

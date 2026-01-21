@@ -4,70 +4,70 @@ import Fluent
 enum ExpenseCategory: String, CaseIterable, Codable {
     case food = "food"
     case transportation = "transportation"
-    case entertainment = "entertainment"
     case shopping = "shopping"
     case bills = "bills"
+    case entertainment = "entertainment"
     case healthcare = "healthcare"
     case education = "education"
     case travel = "travel"
-    case groceries = "groceries"
-    case utilities = "utilities"
-    case rent = "rent"
-    case insurance = "insurance"
     case other = "other"
     
     var displayName: String {
         switch self {
         case .food: return "Food & Dining"
         case .transportation: return "Transportation"
-        case .entertainment: return "Entertainment"
         case .shopping: return "Shopping"
         case .bills: return "Bills & Utilities"
+        case .entertainment: return "Entertainment"
         case .healthcare: return "Healthcare"
         case .education: return "Education"
         case .travel: return "Travel"
-        case .groceries: return "Groceries"
-        case .utilities: return "Utilities"
-        case .rent: return "Rent & Housing"
-        case .insurance: return "Insurance"
         case .other: return "Other"
         }
     }
     
     var icon: String {
         switch self {
-        case .food: return "🍽️"
+        case .food: return "🍴"
         case .transportation: return "🚗"
-        case .entertainment: return "🎬"
         case .shopping: return "🛍️"
-        case .bills: return "📄"
+        case .bills: return "⚡"
+        case .entertainment: return "📺"
         case .healthcare: return "🏥"
         case .education: return "📚"
         case .travel: return "✈️"
-        case .groceries: return "🛒"
-        case .utilities: return "💡"
-        case .rent: return "🏠"
-        case .insurance: return "🛡️"    
-        case .other: return "📦"
+        case .other: return "•••"
         }
     }
     
     /// Parse category from either rawValue or displayName
     static func from(_ string: String) -> ExpenseCategory? {
-        // Try rawValue first
-        if let category = ExpenseCategory(rawValue: string.lowercased()) {
+        let normalized = string.lowercased().trimmingCharacters(in: .whitespaces)
+        
+        // Try rawValue mapping
+        if let category = ExpenseCategory(rawValue: normalized) {
             return category
         }
         
-        // Try displayName mapping
-        let normalized = string.lowercased().trimmingCharacters(in: .whitespaces)
+        // Try exact match on displayName
+        for category in ExpenseCategory.allCases {
+            if category.displayName.lowercased() == normalized {
+                return category
+            }
+        }
+        
+        // Special mappings for loose labels
         switch normalized {
-        case "food & dining", "food and dining":
+        case "food", "dining", "food and dining", "food & dining":
             return .food
-        case "bills & utilities", "bills and utilities":
+        case "transport", "transportation":
+            return .transportation
+        case "bills", "utilities", "bills and utilities", "bills & utilities":
             return .bills
-        case "rent & housing", "rent and housing":
-            return .rent
+        case "rent", "housing", "rent & housing":
+            return .bills // Consolidating into bills for now if not present
+        case "medical", "health", "healthcare":
+            return .healthcare
         default:
             return nil
         }

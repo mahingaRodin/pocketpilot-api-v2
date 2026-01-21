@@ -38,7 +38,7 @@ struct BudgetController: RouteCollection {
         let createRequest = try req.content.decode(CreateBudgetRequest.self)
         try createRequest.validate()
         
-        guard let category = ExpenseCategory(rawValue: createRequest.category) else {
+        guard let category = ExpenseCategory.from(createRequest.category) else {
             throw Abort(.badRequest, reason: "Invalid category: \(createRequest.category)")
         }
         
