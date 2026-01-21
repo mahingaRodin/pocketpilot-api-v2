@@ -6,7 +6,7 @@ import JWT
 public func configure(_ app: Application) throws {
 
     // Server hostname
-    app.http.server.configuration.hostname = "10.12.73.61"
+    app.http.server.configuration.hostname = "10.12.74.53"
 
     // Database
     app.databases.use(.sqlite(.file("db.sqlite")), as: .sqlite)
@@ -43,6 +43,7 @@ public func configure(_ app: Application) throws {
     app.migrations.add(AddProfilePictureToUsers())
 
     // Middleware
+    app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
     app.middleware.use(ErrorMiddleware.default(environment: app.environment))
     app.middleware.use(RateLimitMiddleware())
 

@@ -8,9 +8,33 @@ struct UserController: RouteCollection {
         
         protected.get("profile", use: getProfile)
         protected.put("profile", use: updateProfile)
+        protected.get("profile-picture", ":userID", use: getProfilePicture)
         protected.post("profile-picture", ":userID", use: uploadProfilePicture)
         protected.put("profile-picture", ":userID", use: updateProfilePicture)
         protected.delete("profile-picture", ":userID", use: deleteProfilePicture)
+    }
+    
+    func getProfilePicture(req: Request) async throws -> Response {
+        guard let userIDString = req.parameters.get("userID"),
+              let userID = UUID(uuidString: userIDString) else {
+            throw Abort(.badRequest, reason: "Invalid user ID")
+        }
+        
+        guard let user = try await User.find(userID, on: req.db) else {
+            throw Abort(.notFound, reason: "User not found")
+        }
+        
+        guard let pictureURL = user.profilePictureURL else {
+            throw Abort(.notFound, reason: "Profile picture not found")
+        }
+        
+        // Return a redirect to the static file or stream the file
+        // For simplicity, we can redirect to the static file URL
+        // or just serve it directly if we want to hide the internal path
+        let publicDir = req.application.directory.publicDirectory
+        let filePath = publicDir + String(pictureURL.dropFirst())
+        
+        return req.fileio.streamFile(at: filePath)
     }
     
     func getProfile(req: Request) async throws -> UserResponse {
