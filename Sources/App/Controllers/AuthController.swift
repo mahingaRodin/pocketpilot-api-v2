@@ -1,6 +1,7 @@
 import Vapor
 import Fluent
 import JWT
+import VaporToOpenAPI
 
 struct AuthController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
@@ -8,21 +9,104 @@ struct AuthController: RouteCollection {
         
         // Public routes
         auth.post("register", use: register)
+            .openAPI(
+                summary: "Register new user",
+                description: "Creates a new user account.",
+                body: .type(UserRegistrationRequest.self),
+                response: .type(AuthResponse.self)
+            )
+        
         auth.post("login", use: login)
+            .openAPI(
+                summary: "Login",
+                description: "Authenticates user and returns access token.",
+                body: .type(UserLoginRequest.self),
+                response: .type(AuthResponse.self)
+            )
+        
         auth.post("refresh", use: refreshToken)
+            .openAPI(
+                summary: "Refresh token",
+                description: "Refreshes an expired access token using a refresh token.",
+                body: .type(RefreshTokenRequest.self),
+                response: .type(AuthResponse.self)
+            )
+            
         auth.post("password", "reset", use: requestPasswordReset)
+            .openAPI(
+                summary: "Request password reset",
+                description: "Sends a password reset email to the user.",
+                body: .type(PasswordResetRequest.self)
+            )
+            
         auth.post("password", "reset", "confirm", use: confirmPasswordReset)
+             .openAPI(
+                summary: "Confirm password reset",
+                description: "Resets the user's password using a token.",
+                body: .type(PasswordResetConfirmation.self)
+            )
+
         auth.post("email", "verify", use: verifyEmail)
+            .openAPI(
+                summary: "Verify email",
+                description: "Verifies user email address.",
+                body: .type(EmailVerificationRequest.self)
+            )
+            
         auth.post("email", "resend", use: resendVerificationEmail)
+            .openAPI(
+                summary: "Resend verification email",
+                description: "Resends the email verification link.",
+                body: .type(ResendVerificationRequest.self)
+            )
         
         // Protected routes
         let protected = auth.grouped(JWTAuthenticator())
+        
         protected.get("me", use: getMe)
+            .openAPI(
+                summary: "Get current user",
+                description: "Returns profile information for the authenticated user.",
+                response: .type(UserResponse.self),
+                auth: .bearer()
+            )
+            
         protected.post("logout", use: logout)
+             .openAPI(
+                summary: "Logout",
+                description: "Revokes the current session.",
+                auth: .bearer()
+            )
+            
         protected.post("logout", "all", use: logoutAllDevices)
+             .openAPI(
+                summary: "Logout all devices",
+                description: "Revokes all active sessions for the user.",
+                auth: .bearer()
+            )
+            
         protected.post("password", "change", use: changePassword)
+             .openAPI(
+                summary: "Change password",
+                description: "Updates the authenticated user's password.",
+                body: .type(ChangePasswordRequest.self),
+                auth: .bearer()
+            )
+            
         protected.get("sessions", use: getSessions)
+             .openAPI(
+                summary: "Get active sessions",
+                description: "Returns a list of all active sessions for the user.",
+                response: .type(SessionListResponse.self),
+                auth: .bearer()
+            )
+            
         protected.delete("sessions", ":sessionID", use: revokeSession)
+             .openAPI(
+                summary: "Revoke session",
+                description: "Revokes a specific session by ID.",
+                auth: .bearer()
+            )
     }
     
     // MARK: - Public Endpoints

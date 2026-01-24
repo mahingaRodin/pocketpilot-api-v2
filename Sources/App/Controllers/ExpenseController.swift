@@ -1,5 +1,6 @@
 import Vapor
 import Fluent
+import VaporToOpenAPI
 
 struct ExpenseController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
@@ -7,11 +8,54 @@ struct ExpenseController: RouteCollection {
         let protected = expenses.grouped(JWTAuthenticator())
         
         protected.get(use: index)
+            .openAPI(
+                summary: "List expenses",
+                description: "Retrieves a paginated list of expenses.",
+                query: .type(ExpenseQueryParams.self),
+                response: .type(ExpenseListResponse.self),
+                auth: .bearer()
+            )
+            
         protected.post(use: create)
+            .openAPI(
+                summary: "Create expense",
+                description: "Creates a new expense record.",
+                body: .type(CreateExpenseRequest.self),
+                response: .type(ExpenseResponse.self),
+                auth: .bearer()
+            )
+            
         protected.get(":expenseID", use: show)
+            .openAPI(
+                summary: "Get expense details",
+                description: "Retrieves details of a specific expense.",
+                response: .type(ExpenseResponse.self),
+                auth: .bearer()
+            )
+            
         protected.put(":expenseID", use: update)
+            .openAPI(
+                summary: "Update expense",
+                description: "Updates an existing expense record.",
+                body: .type(UpdateExpenseRequest.self),
+                response: .type(ExpenseResponse.self),
+                auth: .bearer()
+            )
+            
         protected.delete(":expenseID", use: delete)
+            .openAPI(
+                summary: "Delete expense",
+                description: "Deletes a specific expense record.",
+                auth: .bearer()
+            )
+            
         protected.get("categories", use: getCategories)
+            .openAPI(
+                summary: "List categories",
+                description: "Retrieves all available expense categories.",
+                response: .type([CategoryResponse].self),
+                auth: .bearer()
+            )
     }
     
     func index(req: Request) async throws -> ExpenseListResponse {

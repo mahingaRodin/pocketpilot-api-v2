@@ -1,5 +1,6 @@
 import Vapor
 import Fluent
+import VaporToOpenAPI
 
 struct ReceiptController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
@@ -7,10 +8,57 @@ struct ReceiptController: RouteCollection {
             .grouped(JWTAuthenticator())
         
         receipts.post("scan", use: scanReceipt)
+            .openAPI(
+                summary: "Scan receipt",
+                description: "Analyzes a receipt image and extracts data.",
+                body: .type(UploadRequest.self), 
+                response: .type(ScanReceiptResponse.self),
+                auth: .bearer()
+            )
+            
         receipts.post("upload", use: uploadReceipt)
+            .openAPI(
+                summary: "Upload receipt",
+                description: "Uploads a receipt image and creates an expense.",
+                body: .type(UploadAndCreateRequest.self),
+                response: .type(ExpenseResponse.self),
+                auth: .bearer()
+            )
+            
         receipts.post("generate", ":expenseID", use: generateReceipt)
+            .openAPI(
+                summary: "Generate receipt",
+                description: "Generates a digital receipt for an expense.",
+                response: .type(ReceiptGenerationService.GeneratedReceipt.self),
+                auth: .bearer()
+            )
+            
         receipts.get(":expenseID", "image", use: getReceiptImage)
+            .openAPI(
+                summary: "Get receipt image",
+                description: "Retrieves the uploaded receipt image.",
+                auth: .bearer()
+            )
+            
         receipts.get(":expenseID", "view", use: viewGeneratedReceipt)
+            .openAPI(
+                summary: "View receipt",
+                description: "Views the generated digital receipt.",
+                auth: .bearer()
+            )
+    }
+    
+    struct UploadRequest: Content {
+        let file: File
+    }
+    
+    struct UploadAndCreateRequest: Content {
+        let file: File?
+        let amount: Double
+        let description: String
+        let category: String
+        let date: String
+        let notes: String?
     }
     
     // MARK: - Scan Receipt (AI OCR)
@@ -139,7 +187,7 @@ struct ReceiptController: RouteCollection {
         let relativePath = String(receiptURL.dropFirst())
         let fullPath = directory + relativePath
         
-        return req.fileio.streamFile(at: fullPath)
+        return try await req.fileio.asyncStreamFile(at: fullPath)
     }
     
     // MARK: - Generate Generative AI Receipt
@@ -208,7 +256,7 @@ struct ReceiptController: RouteCollection {
             let directory = req.application.directory.publicDirectory
             let relativePath = String(receiptURL.dropFirst())
             let fullPath = directory + relativePath
-            return req.fileio.streamFile(at: fullPath)
+            return try await req.fileio.asyncStreamFile(at: fullPath)
         } else {
             // Redirect to image handler if it's an image
             return req.redirect(to: "/api/v1/receipts/\(expenseID)/image")

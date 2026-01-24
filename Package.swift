@@ -18,6 +18,8 @@ let package = Package(
         .package(url: "https://github.com/vapor/fluent-sqlite-driver.git", from: "4.0.0"),
         // JWT - using older version
         .package(url: "https://github.com/vapor/jwt.git", from: "4.0.0"),
+        // OpenAPI Generator
+        .package(url: "https://github.com/dankinsoid/VaporToOpenAPI.git", from: "4.0.0"),
     ],
     targets: [
         .executableTarget(
@@ -27,6 +29,7 @@ let package = Package(
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver"),
                 .product(name: "JWT", package: "jwt"),
+                .product(name: "VaporToOpenAPI", package: "VaporToOpenAPI"),
             ]
         ),
         .testTarget(

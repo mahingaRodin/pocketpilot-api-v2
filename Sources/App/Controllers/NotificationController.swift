@@ -1,5 +1,6 @@
 import Vapor
 import Fluent
+import VaporToOpenAPI
 
 struct NotificationController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
@@ -7,21 +8,100 @@ struct NotificationController: RouteCollection {
             .grouped(JWTAuthenticator())
         
         notifications.get(use: index)
+            .openAPI(
+                summary: "List notifications",
+                description: "Retrieves a paginated list of notifications.",
+                response: .type(NotificationListResponse.self),
+                auth: .bearer()
+            )
+            
         notifications.get("unread", use: getUnread)
+            .openAPI(
+                summary: "Get unread notifications",
+                description: "Retrieves a list of recent unread notifications.",
+                response: .type([NotificationResponse].self),
+                auth: .bearer()
+            )
+            
         notifications.get("unread", "count", use: getUnreadCount)
+            .openAPI(
+                summary: "Get unread count",
+                description: "Retrieves the total count of unread notifications.",
+                response: .type(UnreadCountResponse.self),
+                auth: .bearer()
+            )
+            
         notifications.put(":notificationID", "read", use: markAsRead)
+            .openAPI(
+                summary: "Mark as read",
+                description: "Marks a specific notification as read.",
+                response: .type(NotificationResponse.self),
+                auth: .bearer()
+            )
+            
         notifications.put("read-all", use: markAllAsRead)
+            .openAPI(
+                summary: "Mark all as read",
+                description: "Marks all notifications as read.",
+                auth: .bearer()
+            )
+            
         notifications.delete(":notificationID", use: delete)
+            .openAPI(
+                summary: "Delete notification",
+                description: "Deletes a specific notification.",
+                auth: .bearer()
+            )
+            
         notifications.delete("clear-all", use: clearAll)
+            .openAPI(
+                summary: "Clear all notifications",
+                description: "Deletes all notifications for the user.",
+                auth: .bearer()
+            )
         
         // Preferences
         notifications.get("preferences", use: getPreferences)
+            .openAPI(
+                summary: "Get preferences",
+                description: "Retrieves user notification preferences.",
+                response: .type(NotificationPreferencesResponse.self),
+                auth: .bearer()
+            )
+            
         notifications.put("preferences", use: updatePreferences)
+            .openAPI(
+                summary: "Update preferences",
+                description: "Updates user notification preferences.",
+                body: .type(UpdateNotificationPreferencesRequest.self),
+                response: .type(NotificationPreferencesResponse.self),
+                auth: .bearer()
+            )
+            
         notifications.post("register-push", use: registerPushToken)
+            .openAPI(
+                summary: "Register push token",
+                description: "Registers a device push token for notifications.",
+                body: .type(RegisterPushTokenRequest.self),
+                auth: .bearer()
+            )
         
         // Testing endpoints
         notifications.post("test", "budget-alert", use: testBudgetAlert)
+            .openAPI(
+                summary: "Test budget alert",
+                description: "Triggers a test budget alert notification.",
+                response: .type(NotificationResponse.self),
+                auth: .bearer()
+            )
+            
         notifications.post("test", "daily-summary", use: testDailySummary)
+             .openAPI(
+                summary: "Test daily summary",
+                description: "Triggers a test daily summary notification.",
+                response: .type(NotificationResponse.self),
+                auth: .bearer()
+            )
     }
     
     // MARK: - Get All Notifications

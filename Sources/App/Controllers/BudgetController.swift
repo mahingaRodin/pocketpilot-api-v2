@@ -1,5 +1,6 @@
 import Vapor
 import Fluent
+import VaporToOpenAPI
 
 struct BudgetController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
@@ -7,16 +8,84 @@ struct BudgetController: RouteCollection {
             .grouped(JWTAuthenticator())
         
         budgets.get(use: index)
+            .openAPI(
+                summary: "List all budgets",
+                description: "Retrieves a list of all active budgets for the user.",
+                response: .type([BudgetResponse].self),
+                auth: .bearer()
+            )
+            
         budgets.post(use: create)
+            .openAPI(
+                summary: "Create budget",
+                description: "Creates a new budget for a category.",
+                body: .type(CreateBudgetRequest.self),
+                response: .type(BudgetResponse.self),
+                auth: .bearer()
+            )
+            
         budgets.get(":budgetID", use: show)
+            .openAPI(
+                summary: "Get budget details",
+                description: "Retrieves details of a specific budget.",
+                response: .type(BudgetResponse.self),
+                auth: .bearer()
+            )
+            
         budgets.put(":budgetID", use: update)
+            .openAPI(
+                summary: "Update budget",
+                description: "Updates a budget's amount or status.",
+                body: .type(UpdateBudgetRequest.self),
+                response: .type(BudgetResponse.self),
+                auth: .bearer()
+            )
+            
         budgets.delete(":budgetID", use: delete)
+            .openAPI(
+                summary: "Delete budget",
+                description: "Deletes a specific budget.",
+                auth: .bearer()
+            )
         
         budgets.get("status", use: getAllStatus)
+            .openAPI(
+                summary: "Get all budget limits",
+                description: "Retrieves the current spending status against all budgets.",
+                response: .type([BudgetStatusResponse].self),
+                auth: .bearer()
+            )
+            
         budgets.get(":budgetID", "status", use: getBudgetStatus)
+            .openAPI(
+                summary: "Get budget status",
+                description: "Retrieves the current spending status for a specific budget.",
+                response: .type(BudgetStatusResponse.self),
+                auth: .bearer()
+            )
+            
         budgets.get("summary", use: getSummary)
+            .openAPI(
+                summary: "Get budget summary",
+                description: "Retrieves a high-level summary of all budgets and alerts.",
+                response: .type(BudgetSummaryResponse.self),
+                auth: .bearer()
+            )
+            
         budgets.get("alerts", use: getAlerts)
+            .openAPI(
+                summary: "List budget alerts",
+                description: "Retrieves a list of all triggered budget alerts.",
+                response: .type([BudgetAlertResponse].self),
+                auth: .bearer()
+            )
+            
         budgets.put("alerts", ":alertID", "read", use: markAlertRead)
+            .openAPI(
+                summary: "Mark alert as read",
+                description: "Marks a specific budget alert as read.",
+                auth: .bearer()
+            )
     }
     
     // MARK: - List All Budgets

@@ -114,7 +114,7 @@ struct RateLimitMiddleware: AsyncMiddleware {
 }
 
 // MARK: - Simple Memory Storage for Rate Limiting
-private class MemoryStorage {
+private final class MemoryStorage: @unchecked Sendable {
     private var storage: [String: (value: Any, expiry: Date)] = [:]
     private let queue = DispatchQueue(label: "memory-storage", attributes: .concurrent)
     

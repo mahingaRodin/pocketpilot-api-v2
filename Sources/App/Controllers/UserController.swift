@@ -1,5 +1,6 @@
 import Vapor
 import Fluent
+import VaporToOpenAPI
 
 struct UserController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
@@ -7,11 +8,58 @@ struct UserController: RouteCollection {
         let protected = users.grouped(JWTAuthenticator())
         
         protected.get("profile", use: getProfile)
+            .openAPI(
+                summary: "Get profile",
+                description: "Retrieves the authenticated user's profile.",
+                response: .type(UserResponse.self),
+                auth: .bearer()
+            )
+            
         protected.put("profile", use: updateProfile)
+            .openAPI(
+                summary: "Update profile",
+                description: "Updates the user's profile information.",
+                body: .type(UserUpdateRequest.self),
+                response: .type(UserResponse.self),
+                auth: .bearer()
+            )
+            
         protected.get("profile-picture", ":userID", use: getProfilePicture)
+            .openAPI(
+                summary: "Get profile picture",
+                description: "Retrieves the user's profile picture file.",
+                auth: .bearer()
+            )
+            
         protected.post("profile-picture", ":userID", use: uploadProfilePicture)
+            .openAPI(
+                summary: "Upload profile picture",
+                description: "Uploads a new profile picture for the user.",
+                body: .type(UploadRequest.self),
+                response: .type(UserResponse.self),
+                auth: .bearer()
+            )
+            
         protected.put("profile-picture", ":userID", use: updateProfilePicture)
+            .openAPI(
+                summary: "Update profile picture",
+                description: "Updates the existing profile picture.",
+                body: .type(UploadRequest.self),
+                response: .type(UserResponse.self),
+                auth: .bearer()
+            )
+            
         protected.delete("profile-picture", ":userID", use: deleteProfilePicture)
+            .openAPI(
+                summary: "Delete profile picture",
+                description: "Removes the user's profile picture.",
+                response: .type(UserResponse.self),
+                auth: .bearer()
+            )
+    }
+    
+    struct UploadRequest: Content {
+        let file: File
     }
     
     func getProfilePicture(req: Request) async throws -> Response {
@@ -34,7 +82,7 @@ struct UserController: RouteCollection {
         let publicDir = req.application.directory.publicDirectory
         let filePath = publicDir + String(pictureURL.dropFirst())
         
-        return req.fileio.streamFile(at: filePath)
+        return try await req.fileio.asyncStreamFile(at: filePath)
     }
     
     func getProfile(req: Request) async throws -> UserResponse {

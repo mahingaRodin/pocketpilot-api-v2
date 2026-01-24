@@ -9,11 +9,11 @@ struct JWTService {
     }
     
     func sign<Payload: JWTPayload>(_ payload: Payload) async throws -> String {
-        return try await application.jwt.signers.sign(payload, kid: nil)
+        return try application.jwt.signers.sign(payload, kid: nil)
     }
     
     func verify<Payload: JWTPayload>(_ token: String, as payload: Payload.Type) async throws -> Payload {
-        return try await application.jwt.signers.verify(token, as: payload)
+        return try application.jwt.signers.verify(token, as: payload)
     }
     
     func generateUserToken(for user: User, expirationTime: TimeInterval = 86400 * 7) async throws -> String {
@@ -25,7 +25,7 @@ struct JWTService {
             exp: .init(value: Date().addingTimeInterval(expirationTime))
         )
         
-        return try await application.jwt.signers.sign(payload, kid: nil)
+        return try application.jwt.signers.sign(payload, kid: nil)
     }
 }
 

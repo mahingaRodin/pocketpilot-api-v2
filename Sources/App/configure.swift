@@ -2,6 +2,7 @@ import Vapor
 import Fluent
 import FluentSQLiteDriver
 import JWT
+import VaporToOpenAPI
 
 public func configure(_ app: Application) throws {
 
@@ -48,6 +49,56 @@ public func configure(_ app: Application) throws {
     app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
     app.middleware.use(ErrorMiddleware.default(environment: app.environment))
     app.middleware.use(RateLimitMiddleware())
+
+    // OpenAPI Configuration
+    // Register OpenAPI JSON route
+    app.get("openapi.json") { req -> OpenAPIObject in
+        // Define API Info
+        let info = InfoObject(
+            title: "PocketPilot API",
+            description: "API for PocketPilot Smart Finance App",
+            version: "2.0.0"
+        )
+        // Generate OpenAPI document from registered routes
+        return app.routes.openAPI(info: info)
+    }
+
+    // Register Swagger UI route
+    app.get("swagger") { req -> Response in
+        let html = """
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="utf-8" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <title>PocketPilot API Documentation</title>
+          <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui.css" />
+        </head>
+        <body>
+        <div id="swagger-ui"></div>
+        <script src="https://unpkg.com/swagger-ui-dist@4.15.5/swagger-ui-bundle.js" crossorigin></script>
+        <script>
+          window.onload = () => {
+            window.ui = SwaggerUIBundle({
+              url: '/openapi.json',
+              dom_id: '#swagger-ui',
+              deepLinking: true,
+              presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIBundle.SwaggerUIStandalonePreset
+              ],
+              layout: "BaseLayout"
+            });
+          };
+        </script>
+        </body>
+        </html>
+        """
+        
+        var headers = HTTPHeaders()
+        headers.contentType = .html
+        return Response(status: .ok, headers: headers, body: .init(string: html))
+    }
 
     // Routes
     try routes(app)

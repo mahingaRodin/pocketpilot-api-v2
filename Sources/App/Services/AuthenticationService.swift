@@ -37,13 +37,7 @@ struct AuthenticationService {
             emailVerified: true  // Email verification disabled
         )
         
-        // Email verification disabled - no token generation needed
-        // let verificationToken = user.generateEmailVerificationToken()
-        
         try await user.save(on: req.db)
-        
-        // Email verification disabled - no verification email sent
-        // try await sendVerificationEmail(to: user.email, token: verificationToken, on: req)
         
         // Generate tokens
         let sessionID = UUID()
@@ -350,7 +344,7 @@ extension AuthenticationService {
             exp: .init(value: Date().addingTimeInterval(86400)) // 24 hours
         )
         
-        return try await app.jwt.signers.sign(payload, kid: nil)
+        return try app.jwt.signers.sign(payload, kid: nil)
     }
     
     // MARK: - Email Methods

@@ -1,5 +1,6 @@
 import Vapor
 import Fluent
+import VaporToOpenAPI
 
 struct DashboardController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
@@ -7,6 +8,12 @@ struct DashboardController: RouteCollection {
         let protected = dashboard.grouped(JWTAuthenticator())
         
         protected.get(use: getDashboard)
+            .openAPI(
+                summary: "Get dashboard data",
+                description: "Retrieves aggregated data for the user dashboard.",
+                response: .type(DashboardResponse.self),
+                auth: .bearer()
+            )
     }
     
     func getDashboard(req: Request) async throws -> DashboardResponse {

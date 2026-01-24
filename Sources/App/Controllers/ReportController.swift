@@ -1,5 +1,6 @@
 import Vapor
 import Fluent
+import VaporToOpenAPI
 
 struct ReportController: RouteCollection {
     func boot(routes: RoutesBuilder) throws {
@@ -7,8 +8,28 @@ struct ReportController: RouteCollection {
             .grouped(JWTAuthenticator())
         
         reports.post("export", use: triggerExport)
+            .openAPI(
+                summary: "Trigger export",
+                description: "Starts an expense export job (CSV or HTML/PDF).",
+                body: .type(ExportRequest.self),
+                response: .type(ExportResponse.self),
+                auth: .bearer()
+            )
+            
         reports.get("list", use: listReports)
+            .openAPI(
+                summary: "List reports",
+                description: "Lists all generated reports for the user.",
+                response: .type([ReportResponse].self),
+                auth: .bearer()
+            )
+            
         reports.get("download", ":filename", use: downloadReport)
+            .openAPI(
+                summary: "Download report",
+                description: "Downloads a specific report file.",
+                auth: .bearer()
+            )
     }
     
     // MARK: - Post Export
@@ -90,6 +111,6 @@ struct ReportController: RouteCollection {
             throw Abort(.notFound)
         }
         
-        return req.fileio.streamFile(at: path)
+        return try await req.fileio.asyncStreamFile(at: path)
     }
 }
