@@ -46,6 +46,13 @@ struct ReceiptController: RouteCollection {
                 description: "Views the generated digital receipt.",
                 auth: .bearer()
             )
+            
+        receipts.get(":expenseID", "download", use: downloadReceipt)
+            .openAPI(
+                summary: "Download receipt",
+                description: "Downloads the receipt file.",
+                auth: .bearer()
+            )
     }
     
     struct UploadRequest: Content {
@@ -261,6 +268,53 @@ struct ReceiptController: RouteCollection {
             // Redirect to image handler if it's an image
             return req.redirect(to: "/api/v1/receipts/\(expenseID)/image")
         }
+    }
+    
+    // MARK: - Download Receipt
+    func downloadReceipt(req: Request) async throws -> Response {
+        let user = try req.auth.require(User.self)
+        guard let userID = user.id else {
+            throw Abort(.internalServerError)
+        }
+        
+        guard let expenseID = req.parameters.get("expenseID", as: UUID.self) else {
+            throw Abort(.badRequest, reason: "Invalid expense ID")
+        }
+        
+        guard let expense = try await Expense.find(expenseID, on: req.db) else {
+            throw Abort(.notFound, reason: "Expense not found")
+        }
+        
+        guard expense.$user.id == userID else {
+            throw Abort(.forbidden, reason: "Access denied")
+        }
+        
+        guard let receiptURL = expense.receiptURL else {
+            throw Abort(.notFound, reason: "No receipt found")
+        }
+        
+        // Finalize Path
+        let directory = req.application.directory.publicDirectory
+        let relativePath = String(receiptURL.dropFirst())
+        let fullPath = directory + relativePath
+        
+        // Get File Name and Extension
+        let fileURL = URL(fileURLWithPath: fullPath)
+        
+        // Create Response
+        let response = try await req.fileio.asyncStreamFile(at: fullPath)
+        
+        // Set Content-Disposition
+        let sanitizedDescription = expense.description
+            .components(separatedBy: CharacterSet.alphanumerics.inverted)
+            .joined(separator: "_")
+        
+        let ext = fileURL.pathExtension.isEmpty ? (receiptURL.hasSuffix(".html") ? "html" : "jpg") : fileURL.pathExtension
+        let downloadName = "receipt-\(sanitizedDescription)-\(expenseID.uuidString.prefix(6)).\(ext)"
+        
+        response.headers.add(name: .contentDisposition, value: "attachment; filename=\"\(downloadName)\"")
+        
+        return response
     }
 
     // MARK: - Helper: Save Receipt Image

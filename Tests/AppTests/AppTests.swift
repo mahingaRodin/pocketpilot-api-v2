@@ -94,7 +94,7 @@ final class AppTests: XCTestCase {
         let expenseRequest = CreateExpenseRequest(
             amount: 25.50,
             description: "Lunch",
-            category: .food,
+            category: ExpenseCategory.food.rawValue,
             date: Date(),
             notes: "Business lunch"
         )
@@ -153,6 +153,47 @@ final class AppTests: XCTestCase {
             XCTAssertEqual(response?.expenses.count, 2)
             XCTAssertEqual(response?.total, 2)
             XCTAssertEqual(response?.totalAmount, 40.50)
+        }
+    }
+    
+    func testDownloadReceipt() async throws {
+        // Create and authenticate user
+        let user = User(
+            email: "test@example.com",
+            passwordHash: try Bcrypt.hash("Password123!"),
+            firstName: "John",
+            lastName: "Doe"
+        )
+        try await user.save(on: app.db)
+        
+        let token = try await app.jwtService.generateUserToken(for: user)
+        
+        // Create expense
+        let expense = Expense(
+            userID: user.id!,
+            amount: 25.50,
+            description: "Lunch",
+            category: .food,
+            date: Date()
+        )
+        try await expense.save(on: app.db)
+        
+        // 1. Generate receipt first
+        try await app.test(.POST, "api/v1/receipts/generate/\(expense.id!)", beforeRequest: { req in
+            req.headers.bearerAuthorization = BearerAuthorization(token: token)
+        }) { res async in
+            XCTAssertEqual(res.status, .ok)
+        }
+        
+        // 2. Test download
+        try await app.test(.GET, "api/v1/receipts/\(expense.id!)/download", beforeRequest: { req in
+            req.headers.bearerAuthorization = BearerAuthorization(token: token)
+        }) { res async in
+            XCTAssertEqual(res.status, .ok)
+            XCTAssertTrue(res.headers.contains(name: .contentDisposition))
+            let disposition = res.headers.first(name: .contentDisposition) ?? ""
+            XCTAssertTrue(disposition.contains("attachment"))
+            XCTAssertTrue(disposition.contains("receipt-Lunch"))
         }
     }
 }
