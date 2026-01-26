@@ -4,7 +4,7 @@ import FluentSQLiteDriver
 import JWT
 import VaporToOpenAPI
 
-public func configure(_ app: Application) throws {
+public func configure(_ app: Application) async throws {
 
     // Server hostname
     app.http.server.configuration.hostname = "10.12.74.53"
@@ -44,6 +44,8 @@ public func configure(_ app: Application) throws {
     app.migrations.add(AddProfilePictureToUsers())
     app.migrations.add(CreateBudget())
     app.migrations.add(CreateNotification())
+    app.migrations.add(CreateChatMessage())
+    app.migrations.add(CreateGamification())
 
     // Middleware
     app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
@@ -100,6 +102,9 @@ public func configure(_ app: Application) throws {
         return Response(status: .ok, headers: headers, body: .init(string: html))
     }
 
+    // Routes
+    try routes(app)
+    
     // Routes
     try routes(app)
 }

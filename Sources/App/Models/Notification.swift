@@ -134,10 +134,10 @@ final class UserNotificationPreferences: Model, Content, @unchecked Sendable {
     @Field(key: "bill_reminders_enabled")
     var billRemindersEnabled: Bool
     
-    @Field(key: "quiet_hours_start")
+    @OptionalField(key: "quiet_hours_start")
     var quietHoursStart: Int? // Hour in 24h format (e.g., 22 for 10 PM)
     
-    @Field(key: "quiet_hours_end")
+    @OptionalField(key: "quiet_hours_end")
     var quietHoursEnd: Int? // Hour in 24h format (e.g., 8 for 8 AM)
     
     @Field(key: "push_enabled")

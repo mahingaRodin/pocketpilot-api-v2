@@ -162,6 +162,19 @@ struct ExpenseController: RouteCollection {
         
         try await expense.save(on: req.db)
         
+        // Update streak
+        _ = try await GamificationService.updateStreak(
+            userID: user.id!,
+            type: .dailyTracking,
+            on: req
+        )
+        
+        // Check achievements
+        _ = try await GamificationService.checkAchievements(
+            for: user.id!,
+            on: req
+        )
+        
         return ExpenseResponse(expense: expense)
     }
     

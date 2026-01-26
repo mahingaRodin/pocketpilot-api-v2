@@ -36,4 +36,10 @@ func routes(_ app: Application) throws {
     
     // Report routes
     try api.register(collection: ReportController())
+    
+    // Chat routes
+    try api.register(collection: ChatController())
+    
+    // Gamification routes
+    try api.register(collection: GamificationController())
 }
