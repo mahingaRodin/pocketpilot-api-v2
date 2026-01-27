@@ -159,6 +159,9 @@ struct ReceiptController: RouteCollection {
         
         try await expense.save(on: req.db)
         
+        // Trigger budget threshold check
+        try? await BudgetService.refreshBudgetAlerts(for: userID, category: category, on: req)
+        
         let expenseResponse = ExpenseResponse(expense: expense)
         return expenseResponse
     }

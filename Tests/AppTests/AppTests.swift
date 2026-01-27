@@ -96,7 +96,8 @@ final class AppTests: XCTestCase {
             description: "Lunch",
             category: ExpenseCategory.food.rawValue,
             date: Date(),
-            notes: "Business lunch"
+            notes: "Business lunch",
+            squadID: nil
         )
         
         try await app.test(.POST, "api/v1/expenses", beforeRequest: { req in

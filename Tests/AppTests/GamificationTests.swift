@@ -33,7 +33,8 @@ final class GamificationTests: XCTestCase {
             description: "Test Expense",
             category: ExpenseCategory.food.rawValue,
             date: Date(),
-            notes: nil
+            notes: nil,
+            squadID: nil
         )
         
         try await app.test(.POST, "api/v1/expenses", beforeRequest: { req in
@@ -90,7 +91,8 @@ final class GamificationTests: XCTestCase {
             description: "Today's Expense",
             category: ExpenseCategory.other.rawValue,
             date: Date(),
-            notes: nil
+            notes: nil,
+            squadID: nil
         )
         
         try await app.test(.POST, "api/v1/expenses", beforeRequest: { req in

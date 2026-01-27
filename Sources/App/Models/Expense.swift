@@ -28,6 +28,9 @@ final class Expense: Model, Content, @unchecked Sendable {
     @OptionalField(key: "receipt_url")
     var receiptURL: String?
     
+    @OptionalParent(key: "squad_id")
+    var squad: Squad?
+    
     @Timestamp(key: "created_at", on: .create)
     var createdAt: Date?
     

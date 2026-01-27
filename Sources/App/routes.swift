@@ -42,4 +42,7 @@ func routes(_ app: Application) throws {
     
     // Gamification routes
     try api.register(collection: GamificationController())
+    
+    // Squad routes
+    try api.register(collection: SquadController())
 }

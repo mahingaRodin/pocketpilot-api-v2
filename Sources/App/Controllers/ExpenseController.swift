@@ -160,6 +160,10 @@ struct ExpenseController: RouteCollection {
             notes: createRequest.notes
         )
         
+        if let squadID = createRequest.squadID {
+            expense.$squad.id = squadID
+        }
+        
         try await expense.save(on: req.db)
         
         // Update streak
@@ -174,6 +178,9 @@ struct ExpenseController: RouteCollection {
             for: user.id!,
             on: req
         )
+        
+        // Trigger budget threshold check
+        try? await BudgetService.refreshBudgetAlerts(for: user.id!, category: category, on: req)
         
         return ExpenseResponse(expense: expense)
     }
@@ -282,6 +289,9 @@ struct ExpenseController: RouteCollection {
             expense.receiptURL = "/receipts/\(fileName)"
             try await expense.save(on: req.db)
         }
+        
+        // Trigger budget threshold check
+        try? await BudgetService.refreshBudgetAlerts(for: user.id!, category: expense.category, on: req)
         
         return ExpenseResponse(expense: expense)
     }

@@ -60,13 +60,23 @@ struct DashboardController: RouteCollection {
             )
         }.sorted { $0.total > $1.total }
         
+        // Calculate Safe-to-Spend
+        let safeToSpend = try? await SafeToSpendService.calculateSafeToSpend(for: user, on: req)
+        
+        // Calculate Eco-Impact
+        let ecoImpact = EcoImpactService.calculateImpact(for: expenses.filter { 
+            $0.date >= startOfMonth 
+        })
+        
         return DashboardResponse(
             totalExpenses: totalExpenses,
             monthlyExpenses: monthlyExpenses,
             weeklyExpenses: weeklyExpenses,
             recentExpenses: recentExpenses,
             categoryBreakdown: categoryBreakdown,
-            budgetStatus: 0.0 // Placeholder until budget is implemented
+            budgetStatus: 0.0, // Placeholder until budget is implemented
+            safeToSpend: safeToSpend,
+            ecoImpact: ecoImpact
         )
     }
 }

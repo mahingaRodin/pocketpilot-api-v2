@@ -7,6 +7,7 @@ struct CreateExpenseRequest: Content, Validatable {
     let category: String
     let date: Date
     let notes: String?
+    let squadID: UUID?
     
     static func validations(_ validations: inout Validations) {
         validations.add("amount", as: Double.self, is: .range(0.01...))

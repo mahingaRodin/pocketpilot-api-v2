@@ -46,6 +46,8 @@ public func configure(_ app: Application) async throws {
     app.migrations.add(CreateNotification())
     app.migrations.add(CreateChatMessage())
     app.migrations.add(CreateGamification())
+    app.migrations.add(AddMonthlyIncomeToUsers())
+    app.migrations.add(CreateSquad())
 
     // Middleware
     app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))

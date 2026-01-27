@@ -137,6 +137,33 @@ struct BudgetService {
             return calendar.date(byAdding: .year, value: 1, to: startDate) ?? startDate
         }
     }
+    
+    // MARK: - Refresh Budget Alerts
+    static func refreshBudgetAlerts(for userID: UUID, category: ExpenseCategory, on req: Request) async throws {
+        // Find active budget for this category
+        guard let budget = try await Budget.query(on: req.db)
+            .filter(\.$user.$id == userID)
+            .filter(\.$category == category)
+            .filter(\.$isActive == true)
+            .first() else { return }
+        
+        // Get all expenses for this budget's category in the period
+        let expenses = try await Expense.query(on: req.db)
+            .filter(\.$user.$id == userID)
+            .filter(\.$category == category)
+            .filter(\.$date >= budget.startDate)
+            .all()
+        
+        // Calculate status
+        let status = try await calculateBudgetStatus(
+            budget: budget,
+            expenses: expenses,
+            on: req
+        )
+        
+        // Check and create alerts
+        try await checkAndCreateAlerts(budget: budget, status: status, on: req)
+    }
 }
 
 extension BudgetStatus {

@@ -221,6 +221,9 @@ struct BudgetController: RouteCollection {
                 on: req
             )
             
+            // Check and create alerts if needed
+            try? await BudgetService.checkAndCreateAlerts(budget: budget, status: status, on: req)
+            
             statuses.append(status)
             totalBudgetAmount += budget.amount
             totalSpentAmount += status.spent

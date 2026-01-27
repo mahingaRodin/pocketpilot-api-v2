@@ -7,6 +7,8 @@ struct DashboardResponse: Content {
     let recentExpenses: [ExpenseResponse]
     let categoryBreakdown: [CategorySummary]
     let budgetStatus: Double // Percentage of budget used (if implemented)
+    let safeToSpend: SafeToSpendData?
+    let ecoImpact: UserEcoImpact?
 }
 
 struct CategorySummary: Content {

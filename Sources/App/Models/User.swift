@@ -50,6 +50,9 @@ final class User: Model, Content, @unchecked Sendable {
     @OptionalField(key: "profile_picture_url")
     var profilePictureURL: String?
     
+    @OptionalField(key: "monthly_income")
+    var monthlyIncome: Double?
+    
     @Children(for: \.$user)
     var expenses: [Expense]
     
