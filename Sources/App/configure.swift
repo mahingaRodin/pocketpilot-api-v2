@@ -7,7 +7,7 @@ import VaporToOpenAPI
 public func configure(_ app: Application) async throws {
 
     // Server hostname
-    app.http.server.configuration.hostname = "10.12.74.53"
+    app.http.server.configuration.hostname = "0.0.0.0"
 
     // Database
     app.databases.use(.sqlite(.file("db.sqlite")), as: .sqlite)
@@ -104,9 +104,6 @@ public func configure(_ app: Application) async throws {
         return Response(status: .ok, headers: headers, body: .init(string: html))
     }
 
-    // Routes
-    try routes(app)
-    
     // Routes
     try routes(app)
 }
