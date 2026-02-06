@@ -79,6 +79,35 @@ final class AppTests: XCTestCase {
         }
     }
     
+    func testUpdateProfileWithMonthlyIncome() async throws {
+        // 1. Create and authenticate user
+        let user = User(
+            email: "update@example.com",
+            passwordHash: try Bcrypt.hash("Password123!"),
+            firstName: "John",
+            lastName: "Doe"
+        )
+        try await user.save(on: app.db)
+        let token = try await app.jwtService.generateUserToken(for: user)
+        
+        // 2. Update profile with monthly income
+        let updateRequest = UserUpdateRequest(
+            firstName: "John",
+            lastName: "Updated",
+            monthlyIncome: 5000.0
+        )
+        
+        try await app.test(.PUT, "api/v1/user/profile", beforeRequest: { req in
+            req.headers.bearerAuthorization = BearerAuthorization(token: token)
+            try req.content.encode(updateRequest)
+        }) { res async in
+            XCTAssertEqual(res.status, .ok)
+            let response = try? res.content.decode(UserResponse.self)
+            XCTAssertEqual(response?.lastName, "Updated")
+            XCTAssertEqual(response?.monthlyIncome, 5000.0)
+        }
+    }
+    
     func testCreateExpense() async throws {
         // Create and authenticate user
         let user = User(

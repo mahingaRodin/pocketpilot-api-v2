@@ -86,6 +86,7 @@ struct UserResponse: Content {
     let lastName: String
     let emailVerified: Bool
     let profilePictureURL: String?
+    let monthlyIncome: Double?
     let lastLogin: Date?
     let createdAt: Date?
     
@@ -96,6 +97,7 @@ struct UserResponse: Content {
         self.lastName = user.lastName
         self.emailVerified = user.emailVerified
         self.profilePictureURL = user.profilePictureURL
+        self.monthlyIncome = user.monthlyIncome
         self.lastLogin = user.lastLogin
         self.createdAt = user.createdAt
     }
@@ -127,9 +129,11 @@ struct SessionListResponse: Content {
 struct UserUpdateRequest: Content, Validatable {
     let firstName: String?
     let lastName: String?
+    let monthlyIncome: Double?
     
     static func validations(_ validations: inout Validations) {
         validations.add("firstName", as: String?.self, is: .nil || !.empty, required: false)
         validations.add("lastName", as: String?.self, is: .nil || !.empty, required: false)
+        validations.add("monthlyIncome", as: Double?.self, is: .nil || .range(0...), required: false)
     }
 }

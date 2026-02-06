@@ -10,7 +10,6 @@ struct SquadController: RouteCollection {
         squads.post("join", use: joinSquad)
         squads.get(use: getMySquads)
         squads.get(":squadID", "members", use: getSquadMembers)
-        squads.get(":squadID", "members", use: getSquadMembers)
         squads.get(":squadID", "settlements", use: getSettlements)
         squads.delete(":squadID", use: deleteSquad)
     }

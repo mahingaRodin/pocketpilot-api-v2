@@ -105,6 +105,10 @@ struct UserController: RouteCollection {
             user.lastName = lastName
         }
         
+        if let monthlyIncome = updateRequest.monthlyIncome {
+            user.monthlyIncome = monthlyIncome
+        }
+        
         try await user.save(on: req.db)
         
         return UserResponse(user: user)
