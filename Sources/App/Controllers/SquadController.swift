@@ -10,7 +10,9 @@ struct SquadController: RouteCollection {
         squads.post("join", use: joinSquad)
         squads.get(use: getMySquads)
         squads.get(":squadID", "members", use: getSquadMembers)
+        squads.get(":squadID", "members", use: getSquadMembers)
         squads.get(":squadID", "settlements", use: getSettlements)
+        squads.delete(":squadID", use: deleteSquad)
     }
     
     // MARK: - Handlers
@@ -190,5 +192,36 @@ struct SquadController: RouteCollection {
         }
         
         return settlements
+    }
+    
+    func deleteSquad(req: Request) async throws -> HTTPStatus {
+        let user = try req.auth.require(User.self)
+        let userID = try user.requireID()
+        
+        guard let squadID = req.parameters.get("squadID", as: UUID.self) else {
+            throw Abort(.badRequest)
+        }
+        
+        // 1. Find squad
+        guard let squad = try await Squad.find(squadID, on: req.db) else {
+            throw Abort(.notFound, reason: "Squad not found")
+        }
+        
+        // 2. Verify user is admin
+        guard let membership = try await SquadMember.query(on: req.db)
+            .filter(\.$squad.$id == squadID)
+            .filter(\.$user.$id == userID)
+            .first() else {
+            throw Abort(.forbidden, reason: "You are not a member of this squad")
+        }
+        
+        guard membership.role == .admin else {
+            throw Abort(.forbidden, reason: "Only admins can delete a squad")
+        }
+        
+        // 3. Delete squad (Cascading delete will handle members and invitations if configured in migration)
+        try await squad.delete(on: req.db)
+        
+        return .noContent
     }
 }

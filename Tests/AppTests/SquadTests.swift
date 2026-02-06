@@ -102,4 +102,41 @@ final class SquadTests: XCTestCase {
             XCTAssertEqual(s.amount, 50.0)
         }
     }
+    
+    func testSquadDeletion() async throws {
+        // 1. Setup user (admin) and squad
+        let admin = User(email: "admin@squad.com", passwordHash: "hash", firstName: "Admin", lastName: "User")
+        try await admin.save(on: app.db)
+        let adminToken = try await app.jwtService.generateUserToken(for: admin)
+        
+        let squad = Squad(name: "Delete Squad", inviteCode: "DELETE1")
+        try await squad.save(on: app.db)
+        
+        try await SquadMember(squadID: squad.id!, userID: admin.id!, role: .admin).save(on: app.db)
+        
+        // 2. Setup another user (member)
+        let member = User(email: "member@squad.com", passwordHash: "hash", firstName: "Member", lastName: "User")
+        try await member.save(on: app.db)
+        let memberToken = try await app.jwtService.generateUserToken(for: member)
+        
+        try await SquadMember(squadID: squad.id!, userID: member.id!, role: .member).save(on: app.db)
+        
+        // 3. Member tries to delete (Should fail)
+        try await app.test(.DELETE, "api/v1/squads/\(squad.id!)", beforeRequest: { req in
+            req.headers.bearerAuthorization = BearerAuthorization(token: memberToken)
+        }) { res async throws in
+            XCTAssertEqual(res.status, .forbidden)
+        }
+        
+        // 4. Admin deletes (Should succeed)
+        try await app.test(.DELETE, "api/v1/squads/\(squad.id!)", beforeRequest: { req in
+            req.headers.bearerAuthorization = BearerAuthorization(token: adminToken)
+        }) { res async throws in
+            XCTAssertEqual(res.status, .noContent)
+        }
+        
+        // 5. Verify squad is gone
+        let deletedSquad = try await Squad.find(squad.id!, on: app.db)
+        XCTAssertNil(deletedSquad)
+    }
 }
